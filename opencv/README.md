@@ -6,7 +6,5 @@ This script uses the quantized yolo5s model.
 
 Install the OpenCV libraries:
 
-    ```
     bash install_requirements.sh
-    ```
 
