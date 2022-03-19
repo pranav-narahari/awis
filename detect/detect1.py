@@ -8,6 +8,24 @@ from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.edgetpu import run_inference
 
 
+try:
+    # Try importing the small tflite_runtime module (this runs on the Dev Board)
+    print("Trying to import tensorflow lite runtime...")
+    from tflite_runtime.interpreter import Interpreter, load_delegate
+    experimental_delegates=[load_delegate('libedgetpu.so.1.0')]
+except ModuleNotFoundError:
+    # Try importing the full tensorflow module (this runs on PC)
+    try:
+        print("TFLite runtime not found; trying to import full tensorflow...")
+        import tensorflow as tf
+        Interpreter = tf.lite.Interpreter
+        experimental_delegates = None
+    except ModuleNotFoundError:
+        # Couldn't import either module
+        raise RuntimeError("Could not import Tensorflow or Tensorflow Lite")
+
+
+
 def append_objs_to_img(cv2_im, inference_size, objs, labels):
     height, width, channels = cv2_im.shape
     scale_x, scale_y = width / inference_size[0], height / inference_size[1]
@@ -32,8 +50,13 @@ def main():
     model = os.path.join(default_model_dir, default_model)
     labels = os.path.join(default_model_dir, default_labels)
 
+    # tfl_filename = "lstm_mnist_model_b10000.tflite"
+    interpreter = Interpreter(model_path=model,
+    experimental_delegates=experimental_delegates)
+    interpreter.allocate_tensors()
 
-    interpreter = make_interpreter(model)
+
+    # interpreter = make_interpreter(model)
     interpreter.allocate_tensors()
     inference_size = input_size(interpreter)
 
