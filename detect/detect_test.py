@@ -69,8 +69,8 @@ if __name__ == "__main__":
 
             im_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             img = cv2.resize(im_rgb, size)
-            # img = img.astype(np.float32)
-            # img /= 255.0
+            img = img.astype(np.float32)
+            img /= 255.0
 
             full_image, net_image, pad = get_image_tensor(image, size[0])
             print(img-net_image)
