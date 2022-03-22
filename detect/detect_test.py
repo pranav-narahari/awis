@@ -44,6 +44,13 @@ if __name__ == "__main__":
     output_details = interpreter.get_output_details()
     print(input_details)
     print(output_details)
+
+    with open(args.names, 'r') as f:
+        data = yaml.load(f, Loader=yaml.SafeLoader)
+
+    print(data)
+    names = data['names']
+    logger.info("Loaded {} classes".format(len(names)))
     
     while True:
         try:
