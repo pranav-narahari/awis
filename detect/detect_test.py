@@ -52,8 +52,8 @@ if __name__ == "__main__":
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
 
-    input_scale, input_zero_point = input_details['quantization']
-    output_scale, output_zero_point = output_details['quantization']
+    input_scale, input_zero_point = input_details[0]['quantization']
+    output_scale, output_zero_point = output_details[0]['quantization']
 
     print(input_zero_point - input_details[0]['quantization'][1])
     print(input_scale - input_details[0]['quantization'][0])
