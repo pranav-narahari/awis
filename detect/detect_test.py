@@ -8,6 +8,7 @@ import glob
 import json
 from pycoral.utils import edgetpu
 from pycoral.adapters import common
+from pycoral.adapters import classify
 
 import numpy as np
 from tqdm import tqdm
@@ -81,9 +82,13 @@ if __name__ == "__main__":
             # print("B- ", net_image.shape)
             # print("==========================")
             # print(img-net_image)
-            pred = model_old.forward(net_image)
-            break
+            # pred = model_old.forward(net_image)
+
             common.set_input(interpreter,img)
+            interpreter.invoke()
+            classes = classify.get_classes(interpreter, top_k=1)
+
+            print(classes)
 
 
         except KeyboardInterrupt:
