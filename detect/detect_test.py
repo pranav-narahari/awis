@@ -56,6 +56,8 @@ if __name__ == "__main__":
     with open(args.labels, 'r') as f:
         data = yaml.load(f, Loader=yaml.SafeLoader)
 
+
+    print(data)
     labels = data['names']
     logger.info("Loaded {} classes".format(len(labels)))
 
@@ -88,7 +90,6 @@ if __name__ == "__main__":
             interpreter.invoke()
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             classes = classify.get_classes(interpreter, top_k=1)
-            print(interpreter_output[0])
 
 
 
