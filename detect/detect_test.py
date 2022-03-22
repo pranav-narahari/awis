@@ -82,7 +82,7 @@ if __name__ == "__main__":
             print("==========================")
             print(img-net_image)
             # pred = model_old.forward(net_image)
-
+            break
             common.set_input(interpreter,img)
 
 
