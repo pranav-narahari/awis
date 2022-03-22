@@ -73,8 +73,8 @@ if __name__ == "__main__":
             # img /= 255.0
 
             full_image, net_image, pad = get_image_tensor(image, size[0])
-            print("A- ", img.shape)
-            print("B", net_image.shape)
+            print(img-net_image)
+            break
 
             common.set_input(interpreter,img)
 
