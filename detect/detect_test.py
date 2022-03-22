@@ -15,6 +15,7 @@ import cv2
 import yaml
 
 from utils import resize_and_pad, get_image_tensor, save_one_json, coco80_to_coco91_class
+from edgetpumodel import EdgeTPUModel
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -40,6 +41,9 @@ if __name__ == "__main__":
 
         
     logger.info("Opening stream on device: {}".format(args.device))
+
+    model_old = EdgeTPUModel(args.model, args.labels, conf_thresh=args.conf_thresh, iou_thresh=args.iou_thresh)
+    input_size_old = model_old.get_image_size()
 
     interpreter = edgetpu.make_interpreter(args.model)
     interpreter.allocate_tensors()
@@ -72,9 +76,12 @@ if __name__ == "__main__":
             img = img.astype(np.float32)
             img /= 255.0
 
-            full_image, net_image, pad = get_image_tensor(image, size[0])
+            full_image, net_image, pad = get_image_tensor(image, input_size_old[0])
+            print("A- ", img.shape)
+            print("B- ", net_image.shape)
+            print("==========================")
             print(img-net_image)
-            break
+            # pred = model_old.forward(net_image)
 
             common.set_input(interpreter,img)
 
