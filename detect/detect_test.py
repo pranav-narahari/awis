@@ -21,7 +21,8 @@ if __name__ == "__main__":
     default_model_dir = '../yolo_model'
     default_model = 'yolov5s-int8-224_edgetpu.tflite'
     parser = argparse.ArgumentParser("EdgeTPU test runner")
-    parser.add_argument("--model", "-m", help="weights file", required=True)
+    parser.add_argument("--model", "-m", help="weights file", 
+                        default=os.path.join(default_model_dir,default_model))
     parser.add_argument("--conf_thresh", type=float, default=0.25, help="model confidence threshold")
     parser.add_argument("--iou_thresh", type=float, default=0.45, help="NMS IOU threshold")
     parser.add_argument("--names", type=str, default='yolo_model/coco.yaml', help="Names file")
@@ -29,7 +30,6 @@ if __name__ == "__main__":
    
     args = parser.parse_args()
 
-    model = os.path.join(default_model_dir,args.model)
     conf_thresh = 0.25
     iou_thresh = 0.45
 
@@ -46,7 +46,7 @@ if __name__ == "__main__":
                 logger.error("Empty image received")
                 break
 
-            interpreter = edgetpu.make_interpreter(model)
+            interpreter = edgetpu.make_interpreter(args.model)
             interpreter.allocate_tensors()
             input_details = interpreter.get_input_details()
             output_details = interpreter.get_output_details()
