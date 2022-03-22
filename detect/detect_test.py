@@ -6,7 +6,6 @@ import time
 from pathlib import Path
 import glob
 import json
-from tkinter import Frame
 from pycoral.utils import edgetpu
 from pycoral.adapters.common import input_size
 
