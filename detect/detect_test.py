@@ -9,6 +9,7 @@ import json
 from pycoral.utils import edgetpu
 from pycoral.adapters import common
 from pycoral.adapters import classify
+from pycoral.utils import dataset
 
 import numpy as np
 from tqdm import tqdm
@@ -37,6 +38,8 @@ if __name__ == "__main__":
    
     args = parser.parse_args()
 
+    label_file = os.path.join(default_model_dir, 'coco_labels.txt')
+
     conf_thresh = 0.25
     iou_thresh = 0.45
 
@@ -50,8 +53,6 @@ if __name__ == "__main__":
     interpreter.allocate_tensors()
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
-
-    print(input_details)
 
     with open(args.labels, 'r') as f:
         data = yaml.load(f, Loader=yaml.SafeLoader)
@@ -89,6 +90,10 @@ if __name__ == "__main__":
             interpreter.invoke()
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             classes = classify.get_classes(interpreter, top_k=1)
+
+            labels = dataset.read_label_file(label_file)
+            for c in classes:
+                print('%s: %.5f' % (labels.get(c.id, c.id), c.score))
 
 
 
