@@ -91,7 +91,20 @@ if __name__ == "__main__":
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
 
-            print(result[0])
+            if len(result):
+            
+                s = ""
+                
+                # Print results
+                for c in np.unique(result[:, -1]):
+                    n = (result[:, -1] == c).sum()  # detections per class
+                    s += f"{n} {labels[int(c)]}{'s' * (n > 1)}, "  # add to string
+                
+                if s != "":
+                    s = s.strip()
+                    s = s[:-1]
+                
+                logger.info("Detected: {}".format(s))
 
         except KeyboardInterrupt:
             break
