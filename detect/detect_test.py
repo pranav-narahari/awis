@@ -91,7 +91,9 @@ if __name__ == "__main__":
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
 
-            print(np.prod(pred[0] - result[0]))
+            print(pred[0])
+            print("====================")
+            print(result[0])
             break
 
             if len(result):
