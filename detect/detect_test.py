@@ -20,12 +20,14 @@ logger = logging.getLogger(__name__)
 if __name__ == "__main__":
     default_model_dir = '../yolo_model'
     default_model = 'yolov5s-int8-224_edgetpu.tflite'
+    default_labels = 'coco.yaml'
     parser = argparse.ArgumentParser("EdgeTPU test runner")
     parser.add_argument("--model", "-m", help="weights file", 
                         default=os.path.join(default_model_dir,default_model))
     parser.add_argument("--conf_thresh", type=float, default=0.25, help="model confidence threshold")
     parser.add_argument("--iou_thresh", type=float, default=0.45, help="NMS IOU threshold")
-    parser.add_argument("--names", type=str, default='yolo_model/coco.yaml', help="Names file")
+    parser.add_argument("--labels", type=str, help="Labels file", 
+                        default=os.path.join(default_model_dir,default_labels))
     parser.add_argument("--device", type=int, default=0, help="Image capture device to run live detection")
    
     args = parser.parse_args()
@@ -45,12 +47,12 @@ if __name__ == "__main__":
     print(input_details)
     print(output_details)
 
-    with open(args.names, 'r') as f:
+    with open(args.labels, 'r') as f:
         data = yaml.load(f, Loader=yaml.SafeLoader)
 
     print(data)
-    names = data['names']
-    logger.info("Loaded {} classes".format(len(names)))
+    labels = data['names']
+    logger.info("Loaded {} classes".format(len(labels)))
     
     while True:
         try:
