@@ -56,9 +56,8 @@ if __name__ == "__main__":
     with open(args.labels, 'r') as f:
         data = yaml.load(f, Loader=yaml.SafeLoader)
 
-
-    print(data)
     labels = data['names']
+    print(labels)
     logger.info("Loaded {} classes".format(len(labels)))
 
     size = common.input_size(interpreter)
