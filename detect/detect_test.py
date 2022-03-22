@@ -37,6 +37,13 @@ if __name__ == "__main__":
     logger.info("Opening stream on device: {}".format(args.device))
     
     cam = cv2.VideoCapture(args.device)
+
+    interpreter = edgetpu.make_interpreter(args.model)
+    interpreter.allocate_tensors()
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+    print(input_details)
+    print(output_details)
     
     while True:
         try:
@@ -46,7 +53,6 @@ if __name__ == "__main__":
                 logger.error("Empty image received")
                 break
 
-            print("Hi")
             interpreter = edgetpu.make_interpreter(args.model)
             interpreter.allocate_tensors()
             input_details = interpreter.get_input_details()
