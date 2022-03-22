@@ -46,6 +46,7 @@ if __name__ == "__main__":
                 logger.error("Empty image received")
                 break
 
+            print("Hi")
             interpreter = edgetpu.make_interpreter(args.model)
             interpreter.allocate_tensors()
             input_details = interpreter.get_input_details()
