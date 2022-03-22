@@ -86,9 +86,10 @@ if __name__ == "__main__":
 
             common.set_input(interpreter,img)
             interpreter.invoke()
+            interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             classes = classify.get_classes(interpreter, top_k=1)
+            print(interpreter_output[0])
 
-            print(classes)
 
 
         except KeyboardInterrupt:
