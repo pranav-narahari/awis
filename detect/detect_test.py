@@ -7,6 +7,7 @@ from pathlib import Path
 import glob
 import json
 from pycoral.utils import edgetpu
+from pycoral.adapters.common import input_size
 
 import numpy as np
 from tqdm import tqdm
@@ -44,15 +45,17 @@ if __name__ == "__main__":
     interpreter.allocate_tensors()
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
+
     print(input_details)
-    print(output_details)
 
     with open(args.labels, 'r') as f:
         data = yaml.load(f, Loader=yaml.SafeLoader)
 
-    print(data)
     labels = data['names']
     logger.info("Loaded {} classes".format(len(labels)))
+
+    size = input_size(interpreter)
+    print(size)
     
     while True:
         try:
