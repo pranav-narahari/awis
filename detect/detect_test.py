@@ -6,6 +6,7 @@ import time
 from pathlib import Path
 import glob
 import json
+from tkinter import Frame
 from pycoral.utils import edgetpu
 from pycoral.adapters.common import input_size
 
@@ -38,8 +39,6 @@ if __name__ == "__main__":
 
         
     logger.info("Opening stream on device: {}".format(args.device))
-    
-    cam = cv2.VideoCapture(args.device)
 
     interpreter = edgetpu.make_interpreter(args.model)
     interpreter.allocate_tensors()
@@ -55,7 +54,9 @@ if __name__ == "__main__":
     logger.info("Loaded {} classes".format(len(labels)))
 
     size = input_size(interpreter)
-    print(size)
+    print(size[0])
+    
+    cam = cv2.VideoCapture(args.device)
     
     while True:
         try:
@@ -65,10 +66,8 @@ if __name__ == "__main__":
                 logger.error("Empty image received")
                 break
 
-            interpreter = edgetpu.make_interpreter(args.model)
-            interpreter.allocate_tensors()
-            input_details = interpreter.get_input_details()
-            output_details = interpreter.get_output_details()
+            im_rgb = cv2.cvtColor(im_rgb, cv2.COLOR_BGR2RGB)
+            img = cv2.resize(im_rgb, size)
 
         except KeyboardInterrupt:
             break
