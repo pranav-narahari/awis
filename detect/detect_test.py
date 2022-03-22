@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
             print("A- ", img.shape)
 
-            full_image, net_image, pad = get_image_tensor(image, input_size[0])
+            full_image, net_image, pad = get_image_tensor(image, size[0])
             print("B- ", net_image.shape)
 
         except KeyboardInterrupt:
