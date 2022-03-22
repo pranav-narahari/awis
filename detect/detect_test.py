@@ -7,7 +7,7 @@ from pathlib import Path
 import glob
 import json
 from pycoral.utils import edgetpu
-from pycoral.adapters.common import input_size
+from pycoral.adapters import common
 
 import numpy as np
 from tqdm import tqdm
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     labels = data['names']
     logger.info("Loaded {} classes".format(len(labels)))
 
-    size = input_size(interpreter)
+    size = common.input_size(interpreter)
     print(size[0])
     
     cam = cv2.VideoCapture(args.device)
@@ -69,11 +69,15 @@ if __name__ == "__main__":
 
             im_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             img = cv2.resize(im_rgb, size)
-
-            print("A- ", img.shape)
+            # img = img.astype(np.float32)
+            # img /= 255.0
 
             full_image, net_image, pad = get_image_tensor(image, size[0])
-            print("B- ", net_image.shape)
+            print("A- ", img.shape)
+            print("B", net_image.shape)
+
+            common.set_input(interpreter,img)
+
 
         except KeyboardInterrupt:
             break
