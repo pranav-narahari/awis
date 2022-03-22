@@ -7,7 +7,6 @@ import yaml
 import numpy as np
 import pycoral.utils.edgetpu as etpu
 from pycoral.adapters import common
-from nms import non_max_suppression
 import cv2
 import json
 
@@ -162,18 +161,9 @@ class EdgeTPUModel:
         
         # Scale output
         result = (common.output_tensor(self.interpreter, 0).astype('float32') - self.output_zero) * self.output_scale
-        self.inference_time = time.time() - tstart
+        self.inference_time = time.time() - tstart  
         
-        if with_nms:
-        
-            tstart = time.time()
-            nms_result = non_max_suppression(result, self.conf_thresh, self.iou_thresh, self.filter_classes, self.agnostic_nms, max_det=self.max_det)
-            self.nms_time = time.time() - tstart
-            
-            return nms_result
-            
-        else:    
-          return result
+        return result
           
     def get_last_inference_time(self, with_nms=True):
         """
