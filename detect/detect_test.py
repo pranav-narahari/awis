@@ -14,6 +14,8 @@ from tqdm import tqdm
 import cv2
 import yaml
 
+from utils import resize_and_pad, get_image_tensor, save_one_json, coco80_to_coco91_class
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -65,8 +67,13 @@ if __name__ == "__main__":
                 logger.error("Empty image received")
                 break
 
-            im_rgb = cv2.cvtColor(im_rgb, cv2.COLOR_BGR2RGB)
+            im_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             img = cv2.resize(im_rgb, size)
+
+            print("A- ", img.shape)
+
+            full_image, net_image, pad = get_image_tensor(image, input_size[0])
+            print("B- ", net_image.shape)
 
         except KeyboardInterrupt:
             break
