@@ -52,10 +52,13 @@ if __name__ == "__main__":
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
 
-    print(input_details[0]['quantization'][1])
-    print(input_details[0]['quantization'][0])
-    print(output_details[0]['quantization'][1])
-    print(output_details[0]['quantization'][0])
+    input_scale, input_zero_point = input_details['quantization']
+    output_scale, output_zero_point = output_details['quantization']
+
+    print(input_zero_point - input_details[0]['quantization'][1])
+    print(input_scale - input_details[0]['quantization'][0])
+    print(output_zero_point - output_details[0]['quantization'][1])
+    print(output_scale - output_details[0]['quantization'][0])
 
     with open(args.labels, 'r') as f:
         data = yaml.load(f, Loader=yaml.SafeLoader)
