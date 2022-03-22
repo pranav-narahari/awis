@@ -157,7 +157,6 @@ class EdgeTPUModel:
         x = x[np.newaxis].astype(np.uint8)
 
         print(x.shape)
-        break
         
         self.interpreter.set_tensor(self.input_details[0]['index'], x)
         self.interpreter.invoke()
