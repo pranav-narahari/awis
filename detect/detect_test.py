@@ -84,12 +84,15 @@ if __name__ == "__main__":
             # print("B- ", net_image.shape)
             # print("==========================")
             # print(img-net_image)
-            # pred = model_old.forward(net_image)
+            pred = model_old.forward(net_image)
 
             common.set_input(interpreter,img)
             interpreter.invoke()
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
+
+            print(pred[0] - result[0])
+            break
 
             if len(result):
             
