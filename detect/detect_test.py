@@ -16,11 +16,10 @@ import yaml
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-from edgetpumodel import EdgeTPUModel
-from utils import resize_and_pad, get_image_tensor, save_one_json, coco80_to_coco91_class
 
 if __name__ == "__main__":
- 
+    default_model_dir = '../yolo_model'
+    default_model = 'yolov5s-int8-224_edgetpu.tflite'
     parser = argparse.ArgumentParser("EdgeTPU test runner")
     parser.add_argument("--model", "-m", help="weights file", required=True)
     parser.add_argument("--conf_thresh", type=float, default=0.25, help="model confidence threshold")
@@ -30,6 +29,7 @@ if __name__ == "__main__":
    
     args = parser.parse_args()
 
+    model = os.path.join(default_model_dir,args.model)
     conf_thresh = 0.25
     iou_thresh = 0.45
 
@@ -46,7 +46,7 @@ if __name__ == "__main__":
                 logger.error("Empty image received")
                 break
 
-            interpreter = edgetpu.make_interpreter(args.model)
+            interpreter = edgetpu.make_interpreter(model)
             interpreter.allocate_tensors()
             input_details = interpreter.get_input_details()
             output_details = interpreter.get_output_details()
