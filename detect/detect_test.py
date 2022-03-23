@@ -117,7 +117,7 @@ if __name__ == "__main__":
             pred = model_old.forward(net_image)
 
             # nms_result = pred
-            print(result-pred)
+            print(pred)
             break
 
             if len(nms_result[0]):
