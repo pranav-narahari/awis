@@ -116,6 +116,14 @@ if __name__ == "__main__":
                 
                 logger.info("Detected: {}".format(s))
 
+                for *xyxy, conf, cls in reversed(result[0]):
+                    c = int(cls)  # integer class
+                    label = f'{labels[c]} {conf:.2f}'
+                    output_image = utils.plot_one_box(xyxy, output_image, label=label)
+                cv2.imshow('frame', output_image)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
+
         except KeyboardInterrupt:
             break
         
