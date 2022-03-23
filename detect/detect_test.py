@@ -88,26 +88,27 @@ if __name__ == "__main__":
 
             full_image, net_image, pad = utils.get_image_tensor(image, input_size_old[0])
             pred = model_old.forward(net_image)
-            result = pred
+            model_old.process_predictions(pred[0], image, pad)
+            # result = pred
 
-            if len(result[0]):
-                # Rescale boxes from img_size to im0 size
-                # x1, y1, x2, y2=
-                result[0][:, :4] = utils.get_scaled_coords(result[0][:,:4], image, pad, size)
+            # if len(result[0]):
+            #     # Rescale boxes from img_size to im0 size
+            #     # x1, y1, x2, y2=
+            #     result[0][:, :4] = utils.get_scaled_coords(result[0][:,:4], image, pad, size)
 
                 
-                s = ""
+            #     s = ""
                 
-                # Print results
-                for c in np.unique(result[0][:, -1]):
-                    n = (result[0][:, -1] == c).sum()  # detections per class
-                    s += f"{n} {labels[int(c)]}{'s' * (n > 1)}, "  # add to string
+            #     # Print results
+            #     for c in np.unique(result[0][:, -1]):
+            #         n = (result[0][:, -1] == c).sum()  # detections per class
+            #         s += f"{n} {labels[int(c)]}{'s' * (n > 1)}, "  # add to string
                 
-                if s != "":
-                    s = s.strip()
-                    s = s[:-1]
+            #     if s != "":
+            #         s = s.strip()
+            #         s = s[:-1]
                 
-                logger.info("Detected: {}".format(s))
+            #     logger.info("Detected: {}".format(s))
 
         except KeyboardInterrupt:
             break
