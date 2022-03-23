@@ -114,9 +114,9 @@ if __name__ == "__main__":
 
             full_image, net_image, pad = utils.get_image_tensor(image, input_size_old[0])
 
-            # pred = model_old.forward(net_image)
+            pred = model_old.forward(net_image)
 
-            # result = pred
+            nms_result = pred
 
             if len(nms_result[0]):
                 # Rescale boxes from img_size to im0 size
