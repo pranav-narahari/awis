@@ -1,11 +1,7 @@
 import os
-import sys
 import argparse
 import logging
-import time
-from pathlib import Path
-import glob
-import json
+
 from pycoral.utils import edgetpu
 from pycoral.adapters import common
 from pycoral.adapters import classify
@@ -13,13 +9,11 @@ from pycoral.utils import dataset
 from pycoral.adapters.detect import get_objects
 
 import numpy as np
-from tqdm import tqdm
 import cv2
 import yaml
 
 import utils
 from objects import get_objects
-# from nms import get_objects
 
 def get_BBox(xyxy, output_image, size):
 
@@ -118,7 +112,6 @@ if __name__ == "__main__":
         
             img = img.astype('float32')
 
-            # Scale input, conversion is: real = (int_8 - zero)*scale
             img = (img/input_scale) + input_zero_point
             img = img[np.newaxis].astype(np.uint8)
 
@@ -137,8 +130,8 @@ if __name__ == "__main__":
                 
                 # Print results
                 for c in np.unique(nms_result[0][:, -1]):
-                    n = (nms_result[0][:, -1] == c).sum()  # detections per class
-                    s += f"{n} {labels[int(c)]}{'s' * (n > 1)}, "  # add to string
+                    n = (nms_result[0][:, -1] == c).sum()
+                    s += f"{n} {labels[int(c)]}{'s' * (n > 1)}, "
                 
                 if s != "":
                     s = s.strip()
@@ -147,7 +140,7 @@ if __name__ == "__main__":
                 logger.info("Detected: {}".format(s))
 
                 for *xyxy, conf, cls in reversed(nms_result[0]):
-                    c = int(cls)  # integer class
+                    c = int(cls)
                     label = f'{labels[c]} {conf:.2f}'
                     output_image = utils.plot_one_box(xyxy, image, label=label)
 
@@ -159,8 +152,4 @@ if __name__ == "__main__":
             break
         
     cam.release()
-            
-        
-
-    
 
