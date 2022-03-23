@@ -19,7 +19,7 @@ import yaml
 
 import utils
 from edgetpumodel import EdgeTPUModel
-import nms
+from nms import non_max_suppression
 
 
 def append_objs_to_img(cv2_im, inference_size, objs, labels):
@@ -110,14 +110,14 @@ if __name__ == "__main__":
             interpreter.invoke()
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
-            nms_result = nms.non_max_suppression(result, conf_thresh, iou_thresh)
+            nms_result = non_max_suppression(result, conf_thresh, iou_thresh)
 
             full_image, net_image, pad = utils.get_image_tensor(image, input_size_old[0])
 
             pred = model_old.forward(net_image)
 
             # nms_result = pred
-            print(result)
+            print(nms_result-pred)
             break
 
             if len(nms_result[0]):

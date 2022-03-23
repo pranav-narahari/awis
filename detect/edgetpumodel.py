@@ -160,9 +160,9 @@ class EdgeTPUModel:
         # Scale output
         result = (common.output_tensor(self.interpreter, 0).astype('float32') - self.output_zero) * self.output_scale
         self.inference_time = time.time() - tstart
-        with_nms = False
+        # with_nms = False
         if with_nms:
-            # print("==============================Hello================================")
+            print("==============================Hello================================")
             tstart = time.time()
             nms_result = non_max_suppression(result, self.conf_thresh, self.iou_thresh, self.filter_classes, self.agnostic_nms, max_det=self.max_det)
             self.nms_time = time.time() - tstart
@@ -170,8 +170,8 @@ class EdgeTPUModel:
             return nms_result
             
         else:
-            print(result)
-            print("==============================Hello================================")
+            # print(result)
+            # print("==============================Hello================================")
             return result
           
     def get_last_inference_time(self, with_nms=True):
