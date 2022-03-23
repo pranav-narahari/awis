@@ -121,7 +121,7 @@ if __name__ == "__main__":
             nms_result = non_max_suppression(result)
 
             print("=================================================")
-            print(len(nms_result))
+            print(nms_result)
             print("=================================================")
 
             full_image, net_image, pad = utils.get_image_tensor(image, input_size_old[0])
