@@ -21,22 +21,33 @@ import utils
 from edgetpumodel import EdgeTPUModel
 from nms import non_max_suppression
 
+def get_BBox(xyxy, output_image, size):
 
-def append_objs_to_img(cv2_im, inference_size, objs, labels):
-    height, width, channels = cv2_im.shape
-    scale_x, scale_y = width / inference_size[0], height / inference_size[1]
-    for obj in objs:
-        bbox = obj.bbox.scale(scale_x, scale_y)
-        x0, y0 = int(bbox.xmin), int(bbox.ymin)
-        x1, y1 = int(bbox.xmax), int(bbox.ymax)
+    in_h, in_w = size
+    out_h, out_w, _ = output_image.shape
+            
+    ratio_w = out_w/(in_w)
+    ratio_h = out_h/(in_h) 
+    
+    out = []
+    for coord in xyxy:
 
-        percent = int(100 * obj.score)
-        label = '{}% {}'.format(percent, labels.get(obj.id, obj.id))
-
-        cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), (0, 255, 0), 2)
-        cv2_im = cv2.putText(cv2_im, label, (x0, y0+30),
-                             cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
-    return cv2_im
+        x1, y1, x2, y2 = coord
+                    
+        x1 *= in_w*ratio_w
+        x2 *= in_w*ratio_w
+        y1 *= in_h*ratio_h
+        y2 *= in_h*ratio_h
+        
+        x1 = max(0, x1)
+        x2 = min(out_w, x2)
+        
+        y1 = max(0, y1)
+        y2 = min(out_h, y2)
+        
+        out.append((x1, y1, x2, y2))
+    
+    return np.array(out).astype(int)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -122,12 +133,10 @@ if __name__ == "__main__":
             nms_result = non_max_suppression(result, conf_thresh, iou_thresh)
 
 
-            full_image, net_image, pad = utils.get_image_tensor(image, input_size_old[0])
-            break
             if len(nms_result[0]):
                 # Rescale boxes from img_size to im0 size
                 # x1, y1, x2, y2=
-                nms_result[0][:, :4] = utils.get_scaled_coords(nms_result[0][:,:4], image, pad, size)
+                nms_result[0][:, :4] = get_BBox(nms_result[0][:,:4], image, size)
 
                 
                 s = ""
