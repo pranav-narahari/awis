@@ -119,7 +119,7 @@ if __name__ == "__main__":
             # nms_result = pred
             # print(nms_result)
 
-            print(np.allclose(result,pred))
+            print(np.allclose(result,pred, rtol=1e-01, atol=1e-01, equal_nan=False))
             break
 
             if len(nms_result[0]):
