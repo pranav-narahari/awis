@@ -16,7 +16,7 @@ from tqdm import tqdm
 import cv2
 import yaml
 
-from utils import resize_and_pad, get_image_tensor, save_one_json, coco80_to_coco91_class
+import utils
 from edgetpumodel import EdgeTPUModel
 
 logging.basicConfig(level=logging.INFO)
@@ -79,7 +79,7 @@ if __name__ == "__main__":
             img = img.astype(np.float32)
             img /= 255.0
 
-            full_image, net_image, pad = get_image_tensor(image, input_size_old[0])
+            full_image, net_image, pad = utils.get_image_tensor(image, input_size_old[0])
             # print("A- ", img.shape)
             # print("B- ", net_image.shape)
             # print("==========================")
@@ -91,14 +91,17 @@ if __name__ == "__main__":
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
 
+            if len(result[0]):
+                # Rescale boxes from img_size to im0 size
+                # x1, y1, x2, y2=
+                result[0][:, :4] = utils.get_scaled_coords(result[0][:,:4], image, pad, size)
 
-            if len(result):
-            
+                
                 s = ""
                 
                 # Print results
-                for c in np.unique(result[:, -1]):
-                    n = (result[:, -1] == c).sum()  # detections per class
+                for c in np.unique(result[0][:, -1]):
+                    n = (result[0][:, -1] == c).sum()  # detections per class
                     s += f"{n} {labels[int(c)]}{'s' * (n > 1)}, "  # add to string
                 
                 if s != "":
