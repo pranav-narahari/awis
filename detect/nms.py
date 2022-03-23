@@ -116,12 +116,14 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
 
         # Check shape
         n = x.shape[0]  # number of boxes
-        print(x)
         if not n:  # no boxes
             continue
         elif n > max_nms:  # excess boxes
             print("entered")
             x = x[x[:, 4].argsort(descending=True)[:max_nms]]  # sort by confidence
+
+        x = x[x[:, 4].argsort(descending=True)[:3]]
+        print(x.shape[0])
 
         # Batched NMS
         c = x[:, 5:6] * (0 if agnostic else max_wh)  # classes
