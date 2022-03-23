@@ -1,3 +1,4 @@
+from audioop import reverse
 import numpy as np
 import time
 
@@ -120,9 +121,9 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
             continue
         elif n > max_nms:  # excess boxes
             print("entered")
-            x = x[x[:, 4].argsort(descending=True)[:max_nms]]  # sort by confidence
+            x = x[x[:, 4].argsort(reverse=True)[:max_nms]]  # sort by confidence
 
-        x = x[x[:, 4].argsort(descending=True)[:3]]
+        x = x[x[:, 4].argsort(reverse=True)[:3]]
         print(x.shape[0])
 
         # Batched NMS
