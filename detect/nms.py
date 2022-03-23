@@ -50,26 +50,12 @@ def nms(dets, scores, thresh):
     return np.array(keep)
 
 
-def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnostic=False, multi_label=False,
-                        labels=(), max_det=300):
+def non_max_suppression(prediction, conf_thres, iou_thres, top):
 
     nc = prediction.shape[2] - 5  # number of classes
     xc = prediction[..., 4] > conf_thres  # candidates
+    labels = ()
 
-    # Checks
-    assert 0 <= conf_thres <= 1, f'Invalid Confidence threshold {conf_thres}, valid values are between 0.0 and 1.0'
-    assert 0 <= iou_thres <= 1, f'Invalid IoU {iou_thres}, valid values are between 0.0 and 1.0'
-
-    # Settings
-    min_wh, max_wh = 2, 4096  # (pixels) minimum and maximum box width and height
-    max_nms = 30000  # maximum number of boxes into torchvision.ops.nms()
-    time_limit = 10.0  # seconds to quit after
-    redundant = True  # require redundant detections
-    multi_label &= nc > 1  # multiple labels per box (adds 0.5ms/img)
-    merge = False  # use merge-NMS
-
-    # print(prediction.shape)
-    # print(prediction)
 
     t = time.time()
     output = [np.zeros((0, 6))] * prediction.shape[0]
@@ -98,48 +84,19 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
         # Box (center x, center y, width, height) to (x1, y1, x2, y2)
         box = xywh2xyxy(x[:, :4])
 
-        # Detections matrix nx6 (xyxy, conf, cls)
-        if multi_label:
-            i, j = (x[:, 5:] > conf_thres).nonzero(as_tuple=False).T
-            x = np.concatenate((box[i], x[i, j + 5, None], j[:, None].astype(float)), axis=1)
-        else:  # best class only
-            conf = np.amax(x[:, 5:], axis=1, keepdims=True)
-            j = np.argmax(x[:, 5:], axis=1).reshape(conf.shape)
-            x = np.concatenate((box, conf, j.astype(float)), axis=1)[conf.flatten() > conf_thres]
+        conf = np.amax(x[:, 5:], axis=1, keepdims=True)
+        j = np.argmax(x[:, 5:], axis=1).reshape(conf.shape)
+        x = np.concatenate((box, conf, j.astype(float)), axis=1)[conf.flatten() > conf_thres]
             
-        # Filter by class
-        if classes is not None:
-            x = x[(x[:, 5:6] == np.array(classes)).any(1)]
 
-        # Apply finite constraint
-        # if not torch.isfinite(x).all():
-        #     x = x[torch.isfinite(x).all(1)]
-
-        # Check shape
-        n = x.shape[0]  # number of boxes
-        print("================================================")
-        print(n)
-        print(x)
-        print("================================================")
-        if not n:  # no boxes
-            continue
-
-        print(x[:,4])
-        x = x[x[:, 4].argsort()[::-1][:n]]
-        print(x[:,4])
-        print(x)
-        print(x.shape[0])
-        print("================================================")
+        x = x[x[:, 4].argsort()[::-1][:top]]
 
         # Batched NMS
-        c = x[:, 5:6] * (0 if agnostic else max_wh)  # classes
+        c = x[:, 5:6] * (4096)  # classes
         boxes, scores = x[:, :4] + c, x[:, 4]  # boxes (offset by class), scores
         
         i = nms(boxes, scores, iou_thres)  # NMS
 
         output[xi] = x[i]
-        if (time.time() - t) > time_limit:
-            print(f'WARNING: NMS time limit {time_limit}s exceeded')
-            break  # time limit exceeded
 
     return output
