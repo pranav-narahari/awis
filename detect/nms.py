@@ -124,7 +124,7 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
         if not n:  # no boxes
             continue
 
-        x = x[x[:, 4].argsort()[:n]]
+        x = x[-x[:, 4].argsort()[:n]]
         print(x)
         print(x.shape[0])
         print("================================================")
