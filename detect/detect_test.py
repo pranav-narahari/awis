@@ -79,18 +79,15 @@ if __name__ == "__main__":
             img = img.astype(np.float32)
             img /= 255.0
 
-            full_image, net_image, pad = utils.get_image_tensor(image, input_size_old[0])
-            # print("A- ", img.shape)
-            # print("B- ", net_image.shape)
-            # print("==========================")
-            # print(img-net_image)
-            pred = model_old.forward(net_image)
+
 
             common.set_input(interpreter,img)
             interpreter.invoke()
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
 
+            full_image, net_image, pad = utils.get_image_tensor(image, input_size_old[0])
+            pred = model_old.forward(net_image)
             result = pred
 
             if len(result[0]):
