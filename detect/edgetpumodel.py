@@ -246,10 +246,9 @@ class EdgeTPUModel:
             
             # Write results
             for *xyxy, conf, cls in reversed(det):
-                if save_img:  # Add bbox to image
-                    c = int(cls)  # integer class
-                    label = None if hide_labels else (self.names[c] if hide_conf else f'{self.names[c]} {conf:.2f}')
-                    output_image = plot_one_box(xyxy, output_image, label=label, color=self.colors(c, True))
+                c = int(cls)  # integer class
+                label = None if hide_labels else (self.names[c] if hide_conf else f'{self.names[c]} {conf:.2f}')
+                output_image = plot_one_box(xyxy, output_image, label=label, color=self.colors(c, True))
                 if save_txt:
                     output[base] = {}
                     output[base]['box'] = xyxy
@@ -264,4 +263,4 @@ class EdgeTPUModel:
             if save_img:
               cv2.imwrite(output_path, output_image)
             
-        return det
+        return output_image

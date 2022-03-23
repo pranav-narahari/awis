@@ -66,10 +66,14 @@ if __name__ == "__main__":
                 full_image, net_image, pad = get_image_tensor(image, input_size[0])
                 pred = model.forward(net_image)
             
-                model.process_predictions(pred[0], full_image, pad)
+                out_im = model.process_predictions(pred[0], full_image, pad)
             
                 tinference, tnms = model.get_last_inference_time()
                 logger.info("Frame done in {}".format(tinference+tnms))
+                
+                cv2.imshow('frame', out_im)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
         except KeyboardInterrupt:
             break
         
