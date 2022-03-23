@@ -105,6 +105,14 @@ if __name__ == "__main__":
             img /= 255.0
 
 
+            if img.shape[0] == 3:
+                img = img.transpose((1,2,0))
+        
+            img = img.astype('float32')
+
+            # Scale input, conversion is: real = (int_8 - zero)*scale
+            img = (img/input_scale) + input_zero_point
+            img = img[np.newaxis].astype(np.uint8)
 
             common.set_input(interpreter,img)
             interpreter.invoke()
