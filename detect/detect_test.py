@@ -125,7 +125,6 @@ if __name__ == "__main__":
             if len(nms_result[0]):
                 nms_result[0][:, :4] = get_BBox(nms_result[0][:,:4], image, size)
 
-                
                 s = ""
                 
                 # Print results
