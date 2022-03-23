@@ -123,7 +123,7 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
             print("entered")
             x = x[x[:, 4].argsort(reverse=True)[:max_nms]]  # sort by confidence
 
-        x = x[x[:, 4].argsort(reverse=True)[:3]]
+        x = x[x[:, 4].argsort()[:3]]
         print(x.shape[0])
 
         # Batched NMS
