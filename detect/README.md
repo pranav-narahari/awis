@@ -9,4 +9,4 @@ Install the OpenCV libraries:
     bash install_requirements.sh
 Install pyyaml
     
-    python3 -m pip install tqdm pyyaml
+    python3 -m pip install pyyaml
