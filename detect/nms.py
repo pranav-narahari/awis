@@ -60,24 +60,21 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
     t = time.time()
     output = [np.zeros((0, 6))] * prediction.shape[0]
     for xi, x in enumerate(prediction):
-        x = x[xc[xi]]  # confidence
-        # print(x)
-        # print(x.shape)
-        # Cat apriori labels if autolabelling
+        x = x[xc[xi]] 
+
         if labels and len(labels[xi]):
             l = labels[xi]
             v = np.zeros((len(l), nc + 5))
-            v[:, :4] = l[:, 1:5]  # box
-            v[:, 4] = 1.0  # conf
-            v[range(len(l)), l[:, 0].long() + 5] = 1.0  # cls
+            v[:, :4] = l[:, 1:5]
+            v[:, 4] = 1.0
+            v[range(len(l)), l[:, 0].long() + 5] = 1.0
             x = np.concatenate((x, v), 0)
 
-        # If none remain process next image
         if not x.shape[0]:
             continue
 
-        # Compute conf
-        x[:, 5:] *= x[:, 4:5]  # conf = obj_conf * cls_conf
+
+        x[:, 5:] *= x[:, 4:5]
 
         box = xywh2xyxy(x[:, :4])
 
@@ -85,8 +82,8 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
         j = np.argmax(x[:, 5:], axis=1).reshape(conf.shape)
         x = np.concatenate((box, conf, j.astype(float)), axis=1)[conf.flatten() > conf_thres]
             
-        if classes is not None:
-            x = x[(x[:, 5:6] == np.array(classes)).any(1)]
+        # if classes is not None:
+        #     x = x[(x[:, 5:6] == np.array(classes)).any(1)]
 
         n = x.shape[0]
         if not n:
