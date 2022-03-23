@@ -118,7 +118,7 @@ if __name__ == "__main__":
             interpreter.invoke()
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
-            nms_result = non_max_suppression(result)
+            nms_result = non_max_suppression(result, conf_thresh, iou_thresh)
 
             print("=================================================")
             print(nms_result)
