@@ -97,7 +97,7 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
         elif n > max_nms:
             x = x[x[:, 4].argsort(descending=True)[:max_nms]]
 
-        c = x[:, 5:6] * (0 if agnostic else 4096)
+        c = x[:, 5:6] * (4096)
         boxes, scores = x[:, :4] + c, x[:, 4]
         
         i = nms(boxes, scores, iou_thres)
