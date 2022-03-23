@@ -111,15 +111,13 @@ if __name__ == "__main__":
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
             nms_result = non_max_suppression(result)
+            print("==============================Hello================================")
 
             full_image, net_image, pad = utils.get_image_tensor(image, input_size_old[0])
-
             pred = model_old.forward(net_image)
 
             # nms_result = pred
-            print(result)
-
-            print(np.allclose(result,pred, rtol=1e-01, atol=1e-01, equal_nan=False))
+            # print(result)
             break
 
             if len(nms_result[0]):
