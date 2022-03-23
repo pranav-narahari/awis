@@ -125,7 +125,7 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
             continue
         elif n > max_nms:  # excess boxes
             print("entered")
-            x = x[x[:, 4].argsort(reverse=True)[:max_nms]]  # sort by confidence
+            x = x[x[:, 4].argsort(reverse=True)[:n]]  # sort by confidence
 
         x = x[x[:, 4].argsort()[:3]]
         print(x)
