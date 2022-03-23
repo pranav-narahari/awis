@@ -112,7 +112,6 @@ if __name__ == "__main__":
 
             im_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             img = cv2.resize(im_rgb, size)
-            print("old size", size[0],size[1])
             img = img.astype(np.float32)
             img /= 255.0
 

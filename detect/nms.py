@@ -116,7 +116,7 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
 
         # Check shape
         n = x.shape[0]  # number of boxes
-        print(n)
+        print(x)
         if not n:  # no boxes
             continue
         elif n > max_nms:  # excess boxes
