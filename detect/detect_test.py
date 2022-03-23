@@ -118,7 +118,6 @@ if __name__ == "__main__":
 
             # nms_result = pred
             print(nms_result)
-            break
 
             if len(nms_result[0]):
                 # Rescale boxes from img_size to im0 size
