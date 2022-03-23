@@ -115,39 +115,39 @@ def save_one_json(predn, jdict, path, class_map):
                       'bbox': [round(x, 3) for x in b],
                       'score': round(p[4], 5)})
 
-def get_scaled_coords(xyxy, output_image, pad, size):
-    """
-    Converts raw prediction bounding box to orginal
-    image coordinates.
+# def get_scaled_coords(xyxy, output_image, pad, size):
+#     """
+#     Converts raw prediction bounding box to orginal
+#     image coordinates.
     
-    Args:
-        xyxy: array of boxes
-        output_image: np array
-        pad: padding due to image resizing (pad_w, pad_h)
-    """
-    pad_w, pad_h = pad
-    in_h, in_w = size
-    out_h, out_w, _ = output_image.shape
+#     Args:
+#         xyxy: array of boxes
+#         output_image: np array
+#         pad: padding due to image resizing (pad_w, pad_h)
+#     """
+#     pad_w, pad_h = pad
+#     in_h, in_w = size
+#     out_h, out_w, _ = output_image.shape
             
-    ratio_w = out_w/(in_w - pad_w)
-    ratio_h = out_h/(in_h - pad_h) 
+#     ratio_w = out_w/(in_w - pad_w)
+#     ratio_h = out_h/(in_h - pad_h) 
     
-    out = []
-    for coord in xyxy:
+#     out = []
+#     for coord in xyxy:
 
-        x1, y1, x2, y2 = coord
+#         x1, y1, x2, y2 = coord
                     
-        x1 *= in_w*ratio_w
-        x2 *= in_w*ratio_w
-        y1 *= in_h*ratio_h
-        y2 *= in_h*ratio_h
+#         x1 *= in_w*ratio_w
+#         x2 *= in_w*ratio_w
+#         y1 *= in_h*ratio_h
+#         y2 *= in_h*ratio_h
         
-        x1 = max(0, x1)
-        x2 = min(out_w, x2)
+#         x1 = max(0, x1)
+#         x2 = min(out_w, x2)
         
-        y1 = max(0, y1)
-        y2 = min(out_h, y2)
+#         y1 = max(0, y1)
+#         y2 = min(out_h, y2)
         
-        out.append((x1, y1, x2, y2))
+#         out.append((x1, y1, x2, y2))
     
-    return np.array(out).astype(int)
+#     return np.array(out).astype(int)

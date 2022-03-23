@@ -7,6 +7,7 @@ import yaml
 import numpy as np
 import pycoral.utils.edgetpu as etpu
 from pycoral.adapters import common
+from nms import non_max_suppression
 import cv2
 import json
 
@@ -136,14 +137,11 @@ class EdgeTPUModel:
     def forward(self, x:np.ndarray, with_nms=True) -> np.ndarray:
         """
         Predict function using the EdgeTPU
-
         Inputs:
             x: (C, H, W) image tensor
             with_nms: apply NMS on output
-
         Returns:
             prediction array (with or without NMS applied)
-
         """
         tstart = time.time()
         # Transpose if C, H, W
@@ -155,17 +153,24 @@ class EdgeTPUModel:
         # Scale input, conversion is: real = (int_8 - zero)*scale
         x = (x/self.input_scale) + self.input_zero
         x = x[np.newaxis].astype(np.uint8)
-
-        print(x.shape)
         
         self.interpreter.set_tensor(self.input_details[0]['index'], x)
         self.interpreter.invoke()
         
         # Scale output
         result = (common.output_tensor(self.interpreter, 0).astype('float32') - self.output_zero) * self.output_scale
-        self.inference_time = time.time() - tstart  
+        self.inference_time = time.time() - tstart
         
-        return result
+        if with_nms:
+        
+            tstart = time.time()
+            nms_result = non_max_suppression(result, self.conf_thresh, self.iou_thresh, self.filter_classes, self.agnostic_nms, max_det=self.max_det)
+            self.nms_time = time.time() - tstart
+            
+            return nms_result
+            
+        else:    
+          return result
           
     def get_last_inference_time(self, with_nms=True):
         """
