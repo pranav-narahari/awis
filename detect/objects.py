@@ -91,6 +91,7 @@ def get_objects(prediction, conf_thres, iou_thres, classes=None, agnostic=False,
         elif n > max_nms:
             x = x[x[:, 4].argsort(descending=True)[:max_nms]]
 
+        x = x[x[:, 4].argsort(descending=True)[::-1][:max_nms]]
         c = x[:, 5:6] * (4096)
         boxes, scores = x[:, :4] + c, x[:, 4]
         
