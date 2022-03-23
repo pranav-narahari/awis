@@ -12,8 +12,23 @@ import numpy as np
 import cv2
 import yaml
 
-import utils
 from objects import get_objects
+
+def make_box(box, im, color=(128, 128, 128), txt_color=(255, 255, 255), label=None, line_width=3):
+
+    lw = line_width or max(int(min(im.size) / 200), 2)
+
+    c1, c2 = (int(box[0]), int(box[1])), (int(box[2]), int(box[3]))
+    
+    cv2.rectangle(im, c1, c2, color, thickness=lw, lineType=cv2.LINE_AA)
+    if label:
+        tf = max(lw - 1, 1)
+        txt_width, txt_height = cv2.getTextSize(label, 0, fontScale=lw / 3, thickness=tf)[0]
+        c2 = c1[0] + txt_width, c1[1] - txt_height - 3
+        cv2.rectangle(im, c1, c2, color, -1, cv2.LINE_AA)
+        cv2.putText(im, label, (c1[0], c1[1] - 2), 0, lw / 3, txt_color, thickness=tf, lineType=cv2.LINE_AA)
+    
+    return im
 
 def get_BBox(xyxy, output_image, size):
 
@@ -141,7 +156,7 @@ if __name__ == "__main__":
                 for *xyxy, conf, cls in reversed(nms_result[0]):
                     c = int(cls)
                     label = f'{labels[c]} {conf:.2f}'
-                    output_image = utils.plot_one_box(xyxy, image, label=label)
+                    output_image = make_box(xyxy, image, label=label)
 
                 cv2.imshow('frame', output_image)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
