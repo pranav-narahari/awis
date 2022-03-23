@@ -120,13 +120,11 @@ if __name__ == "__main__":
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
             nms_result = non_max_suppression(result)
 
+            print("=================================================")
+            print(nms_result.shape)
+            print("=================================================")
+
             full_image, net_image, pad = utils.get_image_tensor(image, input_size_old[0])
-            pred = model_old.forward(net_image)
-
-            # nms_result = pred
-            # print(result)
-
-
             if len(nms_result[0]):
                 # Rescale boxes from img_size to im0 size
                 # x1, y1, x2, y2=
