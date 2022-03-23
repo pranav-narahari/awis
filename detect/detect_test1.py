@@ -31,7 +31,7 @@ if __name__ == "__main__":
     parser.add_argument("--names", type=str, help="Labels file", 
                         default=os.path.join(default_model_dir,default_labels))
     parser.add_argument("--device", type=int, default=0, help="Image capture device to run live detection")
-    parser.add_argument("--stream", action='store_true', help="Process a stream")
+
 
     args = parser.parse_args()
         
@@ -41,8 +41,6 @@ if __name__ == "__main__":
     model = EdgeTPUModel(args.model, args.names, conf_thresh=args.conf_thresh, iou_thresh=args.iou_thresh)
     input_size = model.get_image_size()
 
-    x = (255*np.random.random((3,*input_size))).astype(np.uint8)
-    model.forward(x)
 
     conf_thresh = 0.25
     iou_thresh = 0.45
