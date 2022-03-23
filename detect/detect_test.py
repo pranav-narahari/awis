@@ -116,7 +116,9 @@ if __name__ == "__main__":
 
             pred = model_old.forward(net_image)
 
-            nms_result = pred
+            # nms_result = pred
+            print(result-pred)
+            break
 
             if len(nms_result[0]):
                 # Rescale boxes from img_size to im0 size
