@@ -19,6 +19,8 @@ import yaml
 
 import utils
 from edgetpumodel import EdgeTPUModel
+import nms
+
 
 def append_objs_to_img(cv2_im, inference_size, objs, labels):
     height, width, channels = cv2_im.shape
@@ -118,13 +120,14 @@ if __name__ == "__main__":
                 # Rescale boxes from img_size to im0 size
                 # x1, y1, x2, y2=
                 result[0][:, :4] = utils.get_scaled_coords(result[0][:,:4], image, pad, size)
+                nms_result = nms.non_max_suppression(result, conf_thresh, iou_thresh)
 
                 
                 s = ""
                 
                 # Print results
-                for c in np.unique(result[0][:, -1]):
-                    n = (result[0][:, -1] == c).sum()  # detections per class
+                for c in np.unique(nms_result[0][:, -1]):
+                    n = (nms_result[0][:, -1] == c).sum()  # detections per class
                     s += f"{n} {labels[int(c)]}{'s' * (n > 1)}, "  # add to string
                 
                 if s != "":
@@ -133,14 +136,12 @@ if __name__ == "__main__":
                 
                 logger.info("Detected: {}".format(s))
 
-                # for *xyxy, conf, cls in reversed(result[0]):
-                #     c = int(cls)  # integer class
-                #     label = f'{labels[c]} {conf:.2f}'
-                #     output_image = utils.plot_one_box(xyxy, image, label=label)
+                for *xyxy, conf, cls in reversed(nms_result[0]):
+                    c = int(cls)  # integer class
+                    label = f'{labels[c]} {conf:.2f}'
+                    output_image = utils.plot_one_box(xyxy, image, label=label)
 
-                objs = get_objects(interpreter, conf_thresh)[:3]
-                cv2_im = append_objs_to_img(cv2_im, size, objs, labels)
-                cv2.imshow('frame', cv2_im)
+                cv2.imshow('frame', output_image)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 

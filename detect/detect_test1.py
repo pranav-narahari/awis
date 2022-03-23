@@ -72,8 +72,3 @@ if __name__ == "__main__":
             break
         
     cam.release()
-            
-        
-
-    
-
