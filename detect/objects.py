@@ -2,19 +2,14 @@ import numpy as np
 import time
 
 def xywh2xyxy(x):
-    # Convert nx4 boxes from [x, y, w, h] to [x1, y1, x2, y2] where xy1=top-left, xy2=bottom-right
     y = np.copy(x)
-    y[:, 0] = x[:, 0] - x[:, 2] / 2  # top left x
-    y[:, 1] = x[:, 1] - x[:, 3] / 2  # top left y
-    y[:, 2] = x[:, 0] + x[:, 2] / 2  # bottom right x
-    y[:, 3] = x[:, 1] + x[:, 3] / 2  # bottom right y
+    y[:, 0] = x[:, 0] - x[:, 2] / 2
+    y[:, 1] = x[:, 1] - x[:, 3] / 2
+    y[:, 2] = x[:, 0] + x[:, 2] / 2
+    y[:, 3] = x[:, 1] + x[:, 3] / 2
     return y
     
 def obj(dets, scores, thresh):
-    '''
-    dets is a numpy array : num_dets, 4
-    scores ia  nump array : num_dets,
-    '''
 
     x1 = dets[:, 0]
     y1 = dets[:, 1]
@@ -22,11 +17,11 @@ def obj(dets, scores, thresh):
     y2 = dets[:, 3]
 
     areas = (x2 - x1 + 1e-9) * (y2 - y1 + 1e-9)
-    order = scores.argsort()[::-1] # get boxes with more ious first
+    order = scores.argsort()[::-1]
     
     keep = []
     while order.size > 0:
-        i = order[0] # pick maxmum iou box
+        i = order[0]
         other_box_ids = order[1:]
         keep.append(i)
         
@@ -35,10 +30,9 @@ def obj(dets, scores, thresh):
         xx2 = np.minimum(x2[i], x2[other_box_ids])
         yy2 = np.minimum(y2[i], y2[other_box_ids])
         
-        #print(list(zip(xx1, yy1, xx2, yy2)))
 
-        w = np.maximum(0.0, xx2 - xx1 + 1e-9) # maximum width
-        h = np.maximum(0.0, yy2 - yy1 + 1e-9) # maxiumum height
+        w = np.maximum(0.0, xx2 - xx1 + 1e-9)
+        h = np.maximum(0.0, yy2 - yy1 + 1e-9)
         inter = w * h
           
         ovr = inter / (areas[i] + areas[other_box_ids] - inter)
@@ -49,13 +43,12 @@ def obj(dets, scores, thresh):
     return np.array(keep)
 
 
-def get_objects(prediction, conf_thres, iou_thres, top, classes=None, agnostic=False, multi_label=False,
-                        labels=(), max_det=300):
+def get_objects(prediction, conf_thres, iou_thres, top, labels=()):
 
-    nc = prediction.shape[2] - 5  # number of classes
-    xc = prediction[..., 4] > conf_thres  # candidates
+    nc = prediction.shape[2] - 5
+    xc = prediction[..., 4] > conf_thres
 
-    max_nms = 30000  # maximum number of boxes into torchvision.ops.nms()
+    max_nms = 30000
 
     t = time.time()
     output = [np.zeros((0, 6))] * prediction.shape[0]

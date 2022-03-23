@@ -68,7 +68,7 @@ if __name__ == "__main__":
    
     args = parser.parse_args()
 
-    conf_thresh = 0.25
+    conf_thresh = 0.5
     iou_thresh = 0.45
     top = 5
 
