@@ -58,7 +58,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-if __name__ == "__main__":
+def main():
     default_model_dir = '../yolo_model'
     default_model = 'yolov5s-int8-224_edgetpu.tflite'
     default_labels = 'coco.yaml'
@@ -163,3 +163,5 @@ if __name__ == "__main__":
         
     cam.release()
 
+if __name__ == '__main__':
+    main()
