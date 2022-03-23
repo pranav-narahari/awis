@@ -55,26 +55,14 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
     nc = prediction.shape[2] - 5  # number of classes
     xc = prediction[..., 4] > conf_thres  # candidates
 
-    # Checks
-    assert 0 <= conf_thres <= 1, f'Invalid Confidence threshold {conf_thres}, valid values are between 0.0 and 1.0'
-    assert 0 <= iou_thres <= 1, f'Invalid IoU {iou_thres}, valid values are between 0.0 and 1.0'
-
     # Settings
     min_wh, max_wh = 2, 4096  # (pixels) minimum and maximum box width and height
     max_nms = 30000  # maximum number of boxes into torchvision.ops.nms()
-    time_limit = 10.0  # seconds to quit after
-    redundant = True  # require redundant detections
     multi_label &= nc > 1  # multiple labels per box (adds 0.5ms/img)
-    merge = False  # use merge-NMS
-
-    # print(prediction.shape)
-    # print(prediction)
 
     t = time.time()
     output = [np.zeros((0, 6))] * prediction.shape[0]
-    for xi, x in enumerate(prediction):  # image index, image inference
-        # Apply constraints
-        # x[((x[..., 2:4] < min_wh) | (x[..., 2:4] > max_wh)).any(1), 4] = 0  # width-height
+    for xi, x in enumerate(prediction):
         x = x[xc[xi]]  # confidence
         # print(x)
         # print(x.shape)
@@ -96,14 +84,9 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
 
         box = xywh2xyxy(x[:, :4])
 
-        if multi_label:
-            print("Entered")
-            i, j = (x[:, 5:] > conf_thres).nonzero(as_tuple=False).T
-            x = np.concatenate((box[i], x[i, j + 5, None], j[:, None].astype(float)), axis=1)
-        else:
-            conf = np.amax(x[:, 5:], axis=1, keepdims=True)
-            j = np.argmax(x[:, 5:], axis=1).reshape(conf.shape)
-            x = np.concatenate((box, conf, j.astype(float)), axis=1)[conf.flatten() > conf_thres]
+        conf = np.amax(x[:, 5:], axis=1, keepdims=True)
+        j = np.argmax(x[:, 5:], axis=1).reshape(conf.shape)
+        x = np.concatenate((box, conf, j.astype(float)), axis=1)[conf.flatten() > conf_thres]
             
         if classes is not None:
             x = x[(x[:, 5:6] == np.array(classes)).any(1)]
@@ -114,7 +97,7 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
         elif n > max_nms:
             x = x[x[:, 4].argsort(descending=True)[:max_nms]]
 
-        c = x[:, 5:6] * (0 if agnostic else max_wh)
+        c = x[:, 5:6] * (0 if agnostic else 4096)
         boxes, scores = x[:, :4] + c, x[:, 4]
         
         i = nms(boxes, scores, iou_thres)
