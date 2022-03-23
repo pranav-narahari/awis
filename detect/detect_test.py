@@ -1,13 +1,12 @@
 import os
 import argparse
 import logging
-
-from pycoral.utils import edgetpu
-from pycoral.adapters import common
-
 import numpy as np
 import cv2
 import yaml
+
+from pycoral.utils import edgetpu
+from pycoral.adapters import common
 
 from objects import get_objects
 
