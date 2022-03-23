@@ -20,19 +20,20 @@ from utils import resize_and_pad, get_image_tensor, save_one_json, coco80_to_coc
 
 if __name__ == "__main__":
  
+    default_model_dir = '../yolo_model'
+    default_model = 'yolov5s-int8-224_edgetpu.tflite'
+    default_labels = 'coco.yaml'
     parser = argparse.ArgumentParser("EdgeTPU test runner")
-    parser.add_argument("--model", "-m", help="weights file", required=True)
-    parser.add_argument("--bench_speed", action='store_true', help="run speed test on dummy data")
-    parser.add_argument("--bench_image", action='store_true', help="run detection test")
+    parser.add_argument("--model", "-m", help="weights file", 
+                        default=os.path.join(default_model_dir,default_model))
     parser.add_argument("--conf_thresh", type=float, default=0.25, help="model confidence threshold")
     parser.add_argument("--iou_thresh", type=float, default=0.45, help="NMS IOU threshold")
-    parser.add_argument("--names", type=str, default='../yolo_model/coco.yaml', help="Names file")
-    parser.add_argument("--image", "-i", type=str, help="Image file to run detection on")
+    parser.add_argument("--labels", type=str, help="Labels file", 
+                        default=os.path.join(default_model_dir,default_labels))
     parser.add_argument("--device", type=int, default=0, help="Image capture device to run live detection")
     parser.add_argument("--stream", action='store_true', help="Process a stream")
-    parser.add_argument("--bench_coco", action='store_true', help="Process a stream")
-    parser.add_argument("--coco_path", type=str, help="Path to COCO 2017 Val folder")
-    parser.add_argument("--quiet","-q", action='store_true', help="Disable logging (except errors)")
+    
+    args = parser.parse_args()
         
     args = parser.parse_args()
     
