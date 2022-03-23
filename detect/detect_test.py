@@ -75,9 +75,6 @@ if __name__ == "__main__":
         
     logger.info("Opening stream on device: {}".format(args.device))
 
-    model_old = EdgeTPUModel(args.model, args.labels, conf_thresh=args.conf_thresh, iou_thresh=args.iou_thresh)
-    input_size_old = model_old.get_image_size()
-
     interpreter = edgetpu.make_interpreter(args.model)
     interpreter.allocate_tensors()
     input_details = interpreter.get_input_details()
@@ -129,7 +126,7 @@ if __name__ == "__main__":
             interpreter.invoke()
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
-            nms_result = non_max_suppression(result, conf_thresh, iou_thresh, top)
+            nms_result = get_objects(result, conf_thresh, iou_thresh, top)
 
 
             if len(nms_result[0]):
