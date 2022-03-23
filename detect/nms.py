@@ -117,11 +117,19 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
 
         # Check shape
         n = x.shape[0]  # number of boxes
+        print("================================================")
+        print(n)
+        print(x)
+        print("================================================")
         if not n:  # no boxes
             continue
 
         print(x[:,4])
         x = x[x[:, 4].argsort()[::-1][:n]]
+        print(x[:,4])
+        print(x)
+        print(x.shape[0])
+        print("================================================")
 
         # Batched NMS
         c = x[:, 5:6] * (0 if agnostic else max_wh)  # classes
@@ -130,5 +138,8 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
         i = nms(boxes, scores, iou_thres)  # NMS
 
         output[xi] = x[i]
+        if (time.time() - t) > time_limit:
+            print(f'WARNING: NMS time limit {time_limit}s exceeded')
+            break  # time limit exceeded
 
     return output
