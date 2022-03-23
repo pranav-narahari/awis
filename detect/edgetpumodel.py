@@ -162,7 +162,7 @@ class EdgeTPUModel:
         self.inference_time = time.time() - tstart
         
         if with_nms:
-        
+            print("==============================Hello================================")
             tstart = time.time()
             nms_result = non_max_suppression(result, self.conf_thresh, self.iou_thresh, self.filter_classes, self.agnostic_nms, max_det=self.max_det)
             self.nms_time = time.time() - tstart
