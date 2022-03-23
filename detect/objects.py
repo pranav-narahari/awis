@@ -49,7 +49,7 @@ def obj(dets, scores, thresh):
     return np.array(keep)
 
 
-def get_objects(prediction, conf_thres, iou_thres, classes=None, agnostic=False, multi_label=False,
+def get_objects(prediction, conf_thres, iou_thres, top, classes=None, agnostic=False, multi_label=False,
                         labels=(), max_det=300):
 
     nc = prediction.shape[2] - 5  # number of classes
@@ -91,7 +91,7 @@ def get_objects(prediction, conf_thres, iou_thres, classes=None, agnostic=False,
         elif n > max_nms:
             x = x[x[:, 4].argsort(descending=True)[:max_nms]]
 
-        x = x[x[:, 4].argsort(descending=True)[::-1][:max_nms]]
+        x = x[x[:, 4].argsort(descending=True)[::-1][:top]]
         c = x[:, 5:6] * (4096)
         boxes, scores = x[:, :4] + c, x[:, 4]
         

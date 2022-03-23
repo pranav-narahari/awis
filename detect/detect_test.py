@@ -126,7 +126,7 @@ if __name__ == "__main__":
             interpreter.invoke()
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
-            nms_result = get_objects(result, conf_thresh, iou_thresh)
+            nms_result = get_objects(result, conf_thresh, iou_thresh, top)
 
 
             if len(nms_result[0]):
