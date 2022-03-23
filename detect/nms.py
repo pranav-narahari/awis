@@ -126,13 +126,7 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
         boxes, scores = x[:, :4] + c, x[:, 4]  # boxes (offset by class), scores
         
         i = nms(boxes, scores, iou_thres)  # NMS
-        
-        if i.shape[0] > max_det:  # limit detections
-            i = i[:max_det]
 
         output[xi] = x[i]
-        if (time.time() - t) > time_limit:
-            print(f'WARNING: NMS time limit {time_limit}s exceeded')
-            break  # time limit exceeded
 
     return output
