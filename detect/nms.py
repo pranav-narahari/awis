@@ -49,7 +49,7 @@ def nms(dets, scores, thresh):
     return np.array(keep)
 
 
-def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnostic=False, multi_label=False,
+def get_objects(prediction, conf_thres, iou_thres, classes=None, agnostic=False, multi_label=False,
                         labels=(), max_det=300):
 
     nc = prediction.shape[2] - 5  # number of classes

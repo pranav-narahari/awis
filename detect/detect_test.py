@@ -19,7 +19,7 @@ import yaml
 
 import utils
 # from objects import get_objects
-from nms import non_max_suppression
+from nms import get_objects
 
 def get_BBox(xyxy, output_image, size):
 
@@ -126,7 +126,7 @@ if __name__ == "__main__":
             interpreter.invoke()
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
-            nms_result = non_max_suppression(result, conf_thresh, iou_thresh)
+            nms_result = get_objects(result, conf_thresh, iou_thresh)
 
 
             if len(nms_result[0]):
