@@ -55,10 +55,7 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
     nc = prediction.shape[2] - 5  # number of classes
     xc = prediction[..., 4] > conf_thres  # candidates
 
-    # Settings
-    min_wh, max_wh = 2, 4096  # (pixels) minimum and maximum box width and height
     max_nms = 30000  # maximum number of boxes into torchvision.ops.nms()
-    multi_label &= nc > 1  # multiple labels per box (adds 0.5ms/img)
 
     t = time.time()
     output = [np.zeros((0, 6))] * prediction.shape[0]
