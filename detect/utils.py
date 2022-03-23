@@ -58,6 +58,7 @@ def resize_and_pad(image, desired_size):
     print("New size", new_size[0], new_size[1])
     
     pad = (delta_w, delta_h)
+    print(pad)
     
     color = [100, 100, 100]
     new_im = cv2.copyMakeBorder(image, 0, delta_h, 0, delta_w, cv2.BORDER_CONSTANT,
