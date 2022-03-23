@@ -19,7 +19,7 @@ import yaml
 
 import utils
 from edgetpumodel import EdgeTPUModel
-from nms import non_max_suppression
+from objects import get_objects
 
 def get_BBox(xyxy, output_image, size):
 
@@ -108,7 +108,6 @@ if __name__ == "__main__":
             res, image = cam.read()
         
             if res is False:
-                logger.error("Empty image received")
                 break
 
             im_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -130,12 +129,10 @@ if __name__ == "__main__":
             interpreter.invoke()
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
-            nms_result = non_max_suppression(result, conf_thresh, iou_thresh)
+            nms_result = non_max_suppression(result, conf_thresh, iou_thresh, top)
 
 
             if len(nms_result[0]):
-                # Rescale boxes from img_size to im0 size
-                # x1, y1, x2, y2=
                 nms_result[0][:, :4] = get_BBox(nms_result[0][:,:4], image, size)
 
                 

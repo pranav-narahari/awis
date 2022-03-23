@@ -1,5 +1,4 @@
 import numpy as np
-import time
 
 def xywh2xyxy(x):
     y = np.copy(x)
@@ -44,12 +43,11 @@ def objects(dets, scores, thresh):
 
 def get_objects(prediction, conf_thres, iou_thres, top, labels=()):
 
-    nc = prediction.shape[2] - 5  # number of classes
-    xc = prediction[..., 4] > conf_thres  # candidates
+    nc = prediction.shape[2] - 5
+    xc = prediction[..., 4] > conf_thres
 
-    max_nms = 30000  # maximum number of boxes into torchvision.ops.nms()
+    max_nms = 30000
 
-    t = time.time()
     output = [np.zeros((0, 6))] * prediction.shape[0]
     for xi, x in enumerate(prediction):
         x = x[xc[xi]] 
