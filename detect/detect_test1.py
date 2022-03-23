@@ -34,13 +34,9 @@ if __name__ == "__main__":
 
 
     args = parser.parse_args()
-        
-    args = parser.parse_args()
-    
-    
+
     model = EdgeTPUModel(args.model, args.names, conf_thresh=args.conf_thresh, iou_thresh=args.iou_thresh)
     input_size = model.get_image_size()
-
 
     conf_thresh = 0.25
     iou_thresh = 0.45
