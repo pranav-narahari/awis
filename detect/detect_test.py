@@ -91,6 +91,8 @@ if __name__ == "__main__":
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
 
+            result = pred
+
             if len(result[0]):
                 # Rescale boxes from img_size to im0 size
                 # x1, y1, x2, y2=
