@@ -1,4 +1,3 @@
-from audioop import reverse
 import numpy as np
 import time
 
@@ -117,25 +116,19 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
 
         # Check shape
         n = x.shape[0]  # number of boxes
-        print("================================================")
-        print(n)
-        print(x)
-        print("================================================")
         if not n:  # no boxes
             continue
-
-        print(x[:,4])
-        x = x[x[:, 4].argsort()[::-1][:n]]
-        print(x[:,4])
-        print(x)
-        print(x.shape[0])
-        print("================================================")
+        elif n > max_nms:  # excess boxes
+            x = x[x[:, 4].argsort(descending=True)[:max_nms]]  # sort by confidence
 
         # Batched NMS
         c = x[:, 5:6] * (0 if agnostic else max_wh)  # classes
         boxes, scores = x[:, :4] + c, x[:, 4]  # boxes (offset by class), scores
         
         i = nms(boxes, scores, iou_thres)  # NMS
+        
+        if i.shape[0] > max_det:  # limit detections
+            i = i[:max_det]
 
         output[xi] = x[i]
         if (time.time() - t) > time_limit:
