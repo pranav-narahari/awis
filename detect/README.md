@@ -7,3 +7,6 @@ This script uses the quantized yolo5s model.
 Install the OpenCV libraries:
 
     bash install_requirements.sh
+Install pyyaml
+    
+    python3 -m pip install pyyaml
