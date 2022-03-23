@@ -4,9 +4,6 @@ import logging
 
 from pycoral.utils import edgetpu
 from pycoral.adapters import common
-from pycoral.adapters import classify
-from pycoral.utils import dataset
-from pycoral.adapters.detect import get_objects
 
 import numpy as np
 import cv2
