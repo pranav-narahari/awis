@@ -94,38 +94,30 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
         # Compute conf
         x[:, 5:] *= x[:, 4:5]  # conf = obj_conf * cls_conf
 
-        # Box (center x, center y, width, height) to (x1, y1, x2, y2)
         box = xywh2xyxy(x[:, :4])
 
-        # Detections matrix nx6 (xyxy, conf, cls)
         if multi_label:
+            print("Entered")
             i, j = (x[:, 5:] > conf_thres).nonzero(as_tuple=False).T
             x = np.concatenate((box[i], x[i, j + 5, None], j[:, None].astype(float)), axis=1)
-        else:  # best class only
+        else:
             conf = np.amax(x[:, 5:], axis=1, keepdims=True)
             j = np.argmax(x[:, 5:], axis=1).reshape(conf.shape)
             x = np.concatenate((box, conf, j.astype(float)), axis=1)[conf.flatten() > conf_thres]
             
-        # Filter by class
         if classes is not None:
             x = x[(x[:, 5:6] == np.array(classes)).any(1)]
 
-        # Apply finite constraint
-        # if not torch.isfinite(x).all():
-        #     x = x[torch.isfinite(x).all(1)]
-
-        # Check shape
-        n = x.shape[0]  # number of boxes
-        if not n:  # no boxes
+        n = x.shape[0]
+        if not n:
             continue
-        elif n > max_nms:  # excess boxes
-            x = x[x[:, 4].argsort(descending=True)[:max_nms]]  # sort by confidence
+        elif n > max_nms:
+            x = x[x[:, 4].argsort(descending=True)[:max_nms]]
 
-        # Batched NMS
-        c = x[:, 5:6] * (0 if agnostic else max_wh)  # classes
-        boxes, scores = x[:, :4] + c, x[:, 4]  # boxes (offset by class), scores
+        c = x[:, 5:6] * (0 if agnostic else max_wh)
+        boxes, scores = x[:, :4] + c, x[:, 4]
         
-        i = nms(boxes, scores, iou_thres)  # NMS
+        i = nms(boxes, scores, iou_thres)
 
         output[xi] = x[i]
 
