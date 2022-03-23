@@ -170,8 +170,8 @@ class EdgeTPUModel:
             return nms_result
             
         else:
-            # print(result)
-            # print("==============================Hello================================")
+            print(result)
+            print("==============================Hello================================")
             return result
           
     def get_last_inference_time(self, with_nms=True):
