@@ -92,7 +92,7 @@ if __name__ == "__main__":
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
 
-            # full_image, net_image, pad = utils.get_image_tensor(image, input_size_old[0])
+            full_image, net_image, pad = utils.get_image_tensor(image, input_size_old[0])
             # pred = model_old.forward(net_image)
 
             # result = pred
