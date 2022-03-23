@@ -74,9 +74,6 @@ def get_objects(prediction, conf_thres, iou_thres, top, labels=()):
         conf = np.amax(x[:, 5:], axis=1, keepdims=True)
         j = np.argmax(x[:, 5:], axis=1).reshape(conf.shape)
         x = np.concatenate((box, conf, j.astype(float)), axis=1)[conf.flatten() > conf_thres]
-            
-        # if classes is not None:
-        #     x = x[(x[:, 5:6] == np.array(classes)).any(1)]
 
         n = x.shape[0]
         if not n:
