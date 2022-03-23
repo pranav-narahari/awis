@@ -10,7 +10,7 @@ def xywh2xyxy(x):
     y[:, 3] = x[:, 1] + x[:, 3] / 2  # bottom right y
     return y
     
-def nms(dets, scores, thresh):
+def obj(dets, scores, thresh):
     '''
     dets is a numpy array : num_dets, 4
     scores ia  nump array : num_dets,
@@ -94,7 +94,7 @@ def get_objects(prediction, conf_thres, iou_thres, classes=None, agnostic=False,
         c = x[:, 5:6] * (4096)
         boxes, scores = x[:, :4] + c, x[:, 4]
         
-        i = nms(boxes, scores, iou_thres)
+        i = obj(boxes, scores, iou_thres)
 
         output[xi] = x[i]
 
