@@ -125,7 +125,7 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
             continue
 
         print(x[:,4])
-        x = x[x[:, 4].argsort()[-n:]]
+        x = x[x[:, 4].argsort()[::-1][:n]]
         print(x[:,4])
         print(x)
         print(x.shape[0])
