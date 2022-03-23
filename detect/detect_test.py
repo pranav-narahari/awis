@@ -70,7 +70,7 @@ if __name__ == "__main__":
 
     conf_thresh = 0.5
     iou_thresh = 0.45
-    top = 3
+    top = 5
 
         
     logger.info("Opening stream on device: {}".format(args.device))
