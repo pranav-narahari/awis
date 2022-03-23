@@ -28,7 +28,7 @@ if __name__ == "__main__":
                         default=os.path.join(default_model_dir,default_model))
     parser.add_argument("--conf_thresh", type=float, default=0.25, help="model confidence threshold")
     parser.add_argument("--iou_thresh", type=float, default=0.45, help="NMS IOU threshold")
-    parser.add_argument("--labels", type=str, help="Labels file", 
+    parser.add_argument("--names", type=str, help="Labels file", 
                         default=os.path.join(default_model_dir,default_labels))
     parser.add_argument("--device", type=int, default=0, help="Image capture device to run live detection")
     parser.add_argument("--stream", action='store_true', help="Process a stream")
