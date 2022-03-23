@@ -18,7 +18,6 @@ import cv2
 import yaml
 
 import utils
-from edgetpumodel import EdgeTPUModel
 from objects import get_objects
 
 def get_BBox(xyxy, output_image, size):
