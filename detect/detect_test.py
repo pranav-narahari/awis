@@ -19,6 +19,7 @@ import yaml
 
 import utils
 from objects import get_objects
+from nms import get_objects
 
 def get_BBox(xyxy, output_image, size):
 
