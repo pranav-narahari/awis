@@ -64,7 +64,6 @@ def get_objects(prediction, conf_thres, iou_thres, top, labels=()):
         if not x.shape[0]:
             continue
 
-
         x[:, 5:] *= x[:, 4:5]
 
         box = xywh2xyxy(x[:, :4])
