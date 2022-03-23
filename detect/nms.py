@@ -128,6 +128,7 @@ def non_max_suppression(prediction, conf_thres, iou_thres, classes=None, agnosti
         i = nms(boxes, scores, iou_thres)  # NMS
         
         if i.shape[0] > max_det:  # limit detections
+            print("Entered")
             i = i[:max_det]
 
         output[xi] = x[i]
