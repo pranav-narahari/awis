@@ -53,6 +53,8 @@ def resize_and_pad(image, desired_size):
     
     delta_w = desired_size - new_size[1]
     delta_h = desired_size - new_size[0]
+
+    print(new_size[0], new_size[1])
     
     pad = (delta_w, delta_h)
     
