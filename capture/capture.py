@@ -19,7 +19,7 @@ def create_dir(usb):
         output_dir = "../data"
     else:
         #Checking USB disk 
-        if not (os.path.exists(os.path.join("/Volumes",usb)) or os.path.exists(os.path.join("/media",os.getlogin(),usb))):
+        if not os.path.exists(os.path.join("/media/usb/data")):
             logger.error("USB Not Connected")
             exit()
         
