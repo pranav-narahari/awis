@@ -66,9 +66,9 @@ def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0, usb
     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH ))
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT ))
 
-    record = False
+    record = True
     start = False
-    capture = False
+    capture = True
 
     start_time = time.time() #start time for delay
     while(True):
