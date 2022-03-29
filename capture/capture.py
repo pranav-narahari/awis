@@ -23,7 +23,7 @@ def create_dir(usb):
             logger.error("USB Not Connected")
             exit()
         
-        output_dir = os.path.join("/media",os.getlogin(),usb,"data") #for Linux
+        output_dir = os.path.join("/media/usb/data") #for Linux
         # output_dir = os.path.join("/Volumes",usb,"data") #for Mac
     
 
