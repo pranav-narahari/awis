@@ -4,31 +4,50 @@ import argparse
 import logging
 import datetime
 import time
-import numpy as np
+import keyboard
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("Data Capture")
 
-#setting folder paths
-output_dir = "../data"
-video_folder = "VideoData"
-image_folder = "ImageData"
+def create_dir(usb):
 
-#creating folders if they do not exist
-if os.path.exists(output_dir) is False:
-    os.mkdir(output_dir)
-if os.path.exists(os.path.join(output_dir,video_folder)) is False:
-    video_path = os.path.join(output_dir,video_folder)
-    os.mkdir(video_path) 
-if os.path.exists(os.path.join(output_dir,image_folder)) is False:
-    image_path = os.path.join(output_dir,image_folder)
-    os.mkdir(image_path)
+    #setting folder paths
+    video_folder = "VideoData"
+    image_folder = "ImageData"
 
-video_path = os.path.join(output_dir,video_folder)
-image_path = os.path.join(output_dir,image_folder)
+    #save in USB or local
+    if usb == 'None':
+        output_dir = "../data"
+    else:
+        #Checking USB disk 
+        if not (os.path.exists(os.path.join("/Volumes",usb)) or os.path.exists(os.path.join("/media",os.getlogin(),usb))):
+            logger.error("USB Not Connected")
+            exit()
+        
+        output_dir = os.path.join("/media",os.getlogin(),usb,"data") #for Linux
+        # output_dir = os.path.join("/Volumes",usb,"data") #for Mac
+    
+
+    #creating folders if they do not exist
+    if os.path.exists(output_dir) is False:
+        os.mkdir(output_dir)
+    if os.path.exists(os.path.join(output_dir,video_folder)) is False:
+        v_path = os.path.join(output_dir,video_folder)
+        os.mkdir(v_path) 
+    if os.path.exists(os.path.join(output_dir,image_folder)) is False:
+        i_path = os.path.join(output_dir,image_folder)
+        os.mkdir(i_path)
+
+    v_path = os.path.join(output_dir,video_folder)
+    i_path = os.path.join(output_dir,image_folder)
+
+    return v_path, i_path
 
 
-def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0):
+def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0, usb='None'):
+
+    #get directories
+    video_path, image_path = create_dir(usb)
 
     if both:
         video = True
@@ -83,17 +102,18 @@ def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0):
             # Display the resulting frame
             cv2.imshow('frame',frame)
             
-            # Press C on keyboard to start/stop image capture
+            # Press r on keyboard to start/stop image capture
             if cv2.waitKey(1) & 0xFF == ord('c'):
                 capture = not capture
                 logger.info(f'Image Capture with {delay}s delay in Progress' if capture else f'Image Capture Ended')
+                time.sleep(1)
             
-            # Press C on keyboard to start/stop video capture
+            # Press r on keyboard to start/stop video capture
             if cv2.waitKey(1) & 0xFF == ord('r'):
                 record = not record
                 logger.info(f'Recording in Progress' if record else f'Recording saved to {os.path.join(video_path,video_name)}')
             
-            # Press Q on keyboard to quit the program
+            # Press q on keyboard to quit the program
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 logger.info(f'Exiting')
                 break
@@ -116,7 +136,8 @@ def parse_args():
     parser.add_argument("--both", action='store_true', help="image and video capture")
     parser.add_argument("--fps", type=int, default=30, help="video fps")
     parser.add_argument("--delay", type=int, default=1, help="image capture delay")
-    parser.add_argument('--camera_idx', type=int, default = 0, help='Index of which video source to use. ')
+    parser.add_argument('--camera_idx', type=int, default=0, help='Index of which video source to use')
+    parser.add_argument("--usb", type=str, default='None', help="USB stick name")
     args = parser.parse_args()
     logger.info(f'Arguements: ' + ', '.join(f'{k}={v}' for k, v in vars(args).items()))
     return args
