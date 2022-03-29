@@ -105,7 +105,6 @@ def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0, usb
             if cv2.waitKey(1) & 0xFF == ord('c'):
                 capture = not capture
                 logger.info(f'Image Capture with {delay}s delay in Progress' if capture else f'Image Capture Ended')
-                time.sleep(1)
             
             # Press r on keyboard to start/stop video capture
             if cv2.waitKey(1) & 0xFF == ord('r'):
