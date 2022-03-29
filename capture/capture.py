@@ -4,7 +4,6 @@ import argparse
 import logging
 import datetime
 import time
-import keyboard
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("Data Capture")
