@@ -99,7 +99,7 @@ def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0, usb
                     start_time = time.time()
 
             # Display the resulting frame
-            cv2.imshow('frame',frame)
+            # cv2.imshow('frame',frame)
             
             # Press r on keyboard to start/stop image capture
             if cv2.waitKey(1) & 0xFF == ord('c'):
