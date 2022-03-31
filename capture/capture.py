@@ -8,22 +8,27 @@ import time
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("Data Capture")
 
-def create_dir(usb):
+def create_dir(output):
 
     #setting folder paths
     video_folder = "VideoData"
     image_folder = "ImageData"
 
     #save in USB or local
-    if usb == 'None':
-        output_dir = "../data"
+    if output == 'None':
+        logger.error("Output Path Not Specified")
+        exit()
     else:
-        #Checking USB disk 
-        if not os.path.exists(os.path.join("/media/usb")):
+        usb_dir = os.path.dirname(output)
+        usb_name = os.path.split(usb_dir)[1]
+        logger.critical(f"Mount the USB Stick to the media folder with name = {usb_name}")
+        input("Press Enter to Continue")
+        #Checking USB disk directory
+        if not os.path.exists(usb_dir):
             logger.error("USB Not Connected")
             exit()
         
-        output_dir = os.path.join("/media/usb/data") #for Linux
+        output_dir = output #for Linux
         # output_dir = os.path.join("/Volumes",usb,"data") #for Mac
     
 
@@ -43,10 +48,12 @@ def create_dir(usb):
     return v_path, i_path
 
 
-def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0, usb='None'):
+def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0, output="None"):
 
+    
+    
     #get directories
-    video_path, image_path = create_dir(usb)
+    video_path, image_path = create_dir(output)
 
     if both:
         video = True
@@ -65,7 +72,7 @@ def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0, usb
     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH ))
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT ))
 
-    record = True
+    record = False
     start = False
     capture = True
 
@@ -135,7 +142,7 @@ def parse_args():
     parser.add_argument("--fps", type=int, default=30, help="video fps")
     parser.add_argument("--delay", type=int, default=1, help="image capture delay")
     parser.add_argument('--camera_idx', type=int, default=0, help='Index of which video source to use')
-    parser.add_argument("--usb", type=str, default='None', help="USB stick name")
+    parser.add_argument("--output", default="None", type=str, help="USB output directory")
     args = parser.parse_args()
     logger.info(f'Arguements: ' + ', '.join(f'{k}={v}' for k, v in vars(args).items()))
     return args
