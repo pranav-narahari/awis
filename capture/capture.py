@@ -30,7 +30,6 @@ def create_dir(output):
         
         output_dir = output #for Linux
         # output_dir = os.path.join("/Volumes",usb,"data") #for Mac
-    
 
     #creating folders if they do not exist
     if os.path.exists(output_dir) is False:
