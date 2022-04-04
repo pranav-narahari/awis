@@ -50,7 +50,9 @@ def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0, out
     
     
     #get directories
-    video_path, image_path = create_dir(output)
+    # video_path, image_path = create_dir(output)
+    video_path = output
+    image_path = output
 
     if both:
         video = True
