@@ -32,8 +32,6 @@ def create_dir(output):
         # output_dir = os.path.join("/Volumes",usb,"data") #for Mac
 
     #creating folders if they do not exist
-    if os.path.exists(output_dir) is False:
-        os.mkdir(output_dir)
     if os.path.exists(os.path.join(output_dir,video_folder)) is False:
         v_path = os.path.join(output_dir,video_folder)
         os.mkdir(v_path) 
