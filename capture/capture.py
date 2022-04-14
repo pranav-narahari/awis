@@ -4,75 +4,36 @@ import argparse
 import logging
 import datetime
 import time
+import threading
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("Data Capture")
 
-def create_dir(output):
-
-    #setting folder paths
-    video_folder = "VideoData"
-    image_folder = "ImageData"
-
-    #save in USB or local
-    if output == 'None':
-        logger.error("Output Path Not Specified")
-        exit()
-    else:
-        usb_dir = os.path.dirname(output)
-        usb_name = os.path.split(usb_dir)[1]
-        logger.critical(f"Mount the USB Stick to the media folder with name = {usb_name}")
-        input("Press Enter to Continue")
-        #Checking USB disk directory
-        if not os.path.exists(usb_dir):
-            logger.error("USB Not Connected")
-            exit()
-        
-        output_dir = output #for Linux
-        # output_dir = os.path.join("/Volumes",usb,"data") #for Mac
-
-    #creating folders if they do not exist
-    if os.path.exists(os.path.join(output_dir,video_folder)) is False:
-        v_path = os.path.join(output_dir,video_folder)
-        os.mkdir(v_path) 
-    if os.path.exists(os.path.join(output_dir,image_folder)) is False:
-        i_path = os.path.join(output_dir,image_folder)
-        os.mkdir(i_path)
-
-    v_path = os.path.join(output_dir,video_folder)
-    i_path = os.path.join(output_dir,image_folder)
-
-    return v_path, i_path
+class camThread(threading.Thread):
+    def __init__(self, delay, camera_idx, output):
+        threading.Thread.__init__(self)
+        self.delay = delay
+        self.camera_idx = camera_idx
+        self.output = output
+    def run(self):
+        action(self.delay, self.camera_idx, self.output)
 
 
-def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0, output="None"):
 
-    
-    
-    #get directories
-    # video_path, image_path = create_dir(output)
-    video_path = output
+def action(delay=1, camera_idx=0, output="None"):
+
+    #assign output directorie
     image_path = output
 
-    if both:
-        video = True
-        image = True
-    
     # Create a VideoCapture object
-    logger.info("Starting video stream...")
+    logger.info("Starting video stream from camera-"+str(camera_idx))
     cap = cv2.VideoCapture(camera_idx)
 
     # Check if camera opened successfully
     if (cap.isOpened() == False): 
         print("Unable to read camera feed")
 
-    # Obtaining frame resolution. The resolution is source dependent.
-    # Convert the resolutions from float to integer.
-    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH ))
-    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT ))
-
-    record = False
-    start = False
+    image = True
     capture = True
 
     start_time = time.time() #start time for delay
@@ -82,24 +43,10 @@ def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0, out
 
         if ret == True:
 
-            #Video recording
-            if video and record:
-                if not start:
-                    video_name = "{}".format(datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")+".avi") #file name with timestamp
-                    vid_out = cv2.VideoWriter(os.path.join(video_path,video_name),cv2.VideoWriter_fourcc('M','J','P','G'), fps, (frame_width,frame_height)) # Create VideoWriter object.The output is saved in the VideoData folder in 'timestamp'.avi file
-                    start = True
-                # Write the frame into the 'timestamp'.avi file
-                vid_out.write(frame)
-
-            #Release video capture when recording stops
-            if not record and start:
-                start = False
-                vid_out.release()
-
             #Image recording
             if image and capture:
                 if time.time()-start_time >= delay:
-                    image_name = "{}".format(datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")+".jpeg")
+                    image_name = "{}".format(datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")+"_camera_"+str(camera_idx)+".jpeg")
                     cv2.imwrite(os.path.join(image_path,image_name), frame)
                     logger.info(f'Image saved to {os.path.join(image_path,image_name)}')
                     start_time = time.time()
@@ -112,10 +59,6 @@ def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0, out
                 capture = not capture
                 logger.info(f'Image Capture with {delay}s delay in Progress' if capture else f'Image Capture Ended')
             
-            # Press r on keyboard to start/stop video capture
-            if cv2.waitKey(1) & 0xFF == ord('r'):
-                record = not record
-                logger.info(f'Recording in Progress' if record else f'Recording saved to {os.path.join(video_path,video_name)}')
             
             # Press q on keyboard to quit the program
             if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -135,19 +78,22 @@ def run(video=False, image=False, both=False, fps=30, delay=1, camera_idx=0, out
 def parse_args():
     # parsing the arguments
     parser = argparse.ArgumentParser("Data Capture")
-    parser.add_argument("--video", action='store_true', help="video capture")
-    parser.add_argument("--image", action='store_true', help="image capture")
-    parser.add_argument("--both", action='store_true', help="image and video capture")
-    parser.add_argument("--fps", type=int, default=30, help="video fps")
     parser.add_argument("--delay", type=int, default=1, help="image capture delay")
-    parser.add_argument('--camera_idx', type=int, default=0, help='Index of which video source to use')
+    parser.add_argument('--camera_idx1', type=int, default=0, help='Index of which video source to use')
+    parser.add_argument('--camera_idx2', type=int, default=-1, help='Index of which video source to use')
     parser.add_argument("--output", default="None", type=str, help="USB output directory")
     args = parser.parse_args()
     logger.info(f'Arguements: ' + ', '.join(f'{k}={v}' for k, v in vars(args).items()))
     return args
 
 def main(args):
-    run(**vars(args))
+    if args.camera_idx2 != -1:
+        thread1 = camThread(args.delay, args.camera_idx1, args.output)
+        thread2 = camThread(args.delay, args.camera_idx2, args.output)
+        thread1.start()
+        thread2.start()
+    else:
+        action(args.delay, args.camera_idx1, args.output)
 
 if __name__ == '__main__':
     args = parse_args()
