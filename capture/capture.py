@@ -27,7 +27,9 @@ def action(delay=1, camera_idx=0, output="None"):
 
     # Create a VideoCapture object
     logger.info("Starting video stream from camera-"+str(camera_idx))
+    print("hi")
     cap = cv2.VideoCapture(camera_idx)
+    print("hello")
 
     # Check if camera opened successfully
     if (cap.isOpened() == False): 
