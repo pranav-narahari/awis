@@ -48,6 +48,7 @@ def action(delay=1, camera_idx=0, output="None"):
             #Image recording
             if image and capture:
                 if time.time()-start_time >= delay:
+                    print("hi")
                     image_name = "{}".format(datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")+"_camera_"+str(camera_idx)+".jpeg")
                     cv2.imwrite(os.path.join(image_path,image_name), frame)
                     logger.info(f'Image saved to {os.path.join(image_path,image_name)}')
