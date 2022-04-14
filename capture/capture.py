@@ -28,8 +28,8 @@ def action(delay=1, camera_idx=0, output="None"):
     # Create a VideoCapture object
     logger.info("Starting video stream from camera-"+str(camera_idx))
     cap = cv2.VideoCapture(camera_idx)
-    cap.set(3,160)
-    cap.set(4,120)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH,300)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT,300)
 
     # Check if camera opened successfully
     if (cap.isOpened() == False): 
@@ -48,7 +48,6 @@ def action(delay=1, camera_idx=0, output="None"):
             #Image recording
             if image and capture:
                 if time.time()-start_time >= delay:
-                    print("hi")
                     image_name = "{}".format(datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")+"_camera_"+str(camera_idx)+".jpeg")
                     cv2.imwrite(os.path.join(image_path,image_name), frame)
                     logger.info(f'Image saved to {os.path.join(image_path,image_name)}')
