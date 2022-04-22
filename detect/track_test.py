@@ -28,7 +28,7 @@ def yolo_detections_to_norfair_detections(yolo_detections,track_points: str = 'c
     """
     norfair_detections: List[tracker.Detection] = []
 
-    detections_as_xyxy = yolo_detections.xyxy[0]
+    detections_as_xyxy = yolo_detections[0]
     for detection_as_xyxy in detections_as_xyxy:
         bbox = np.array(
             [
@@ -167,10 +167,8 @@ def main():
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
             nms_result = get_objects(result, conf_thresh, iou_thresh, top)
-            print(nms_result[0].shape)
-            exit()
 
-            detections = yolo_detections_to_norfair_detections(nms_result, track_points="bbox")
+            detections = yolo_detections_to_norfair_detections(nms_result[0], track_points="bbox")
 
             tracked_objects = track.update(detections=detections)
             drawing.draw_boxes(img, detections)
