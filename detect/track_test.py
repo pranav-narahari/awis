@@ -28,32 +28,16 @@ def yolo_detections_to_norfair_detections(yolo_detections,track_points: str = 'c
     """
     norfair_detections: List[tracker.Detection] = []
 
-    if track_points == 'centroid':
-        detections_as_xywh = yolo_detections.xywh[0]
-        for detection_as_xywh in detections_as_xywh:
-            centroid = np.array(
-                [
-                    detection_as_xywh[0].item(),
-                    detection_as_xywh[1].item()
-                ]
-            )
-            scores = np.array([detection_as_xywh[4].item()])
-            norfair_detections.append(
-                tracker.Detection(points=centroid, scores=scores)
-            )
-    elif track_points == 'bbox':
-        detections_as_xyxy = yolo_detections.xyxy[0]
-        for detection_as_xyxy in detections_as_xyxy:
-            bbox = np.array(
-                [
-                    [detection_as_xyxy[0].item(), detection_as_xyxy[1].item()],
-                    [detection_as_xyxy[2].item(), detection_as_xyxy[3].item()]
-                ]
-            )
-            scores = np.array([detection_as_xyxy[4].item(), detection_as_xyxy[4].item()])
-            norfair_detections.append(
-                tracker.Detection(points=bbox, scores=scores)
-            )
+    detections_as_xyxy = yolo_detections.xyxy[0]
+    for detection_as_xyxy in detections_as_xyxy:
+        bbox = np.array(
+            [
+                [detection_as_xyxy[0].item(), detection_as_xyxy[1].item()],
+                [detection_as_xyxy[2].item(), detection_as_xyxy[3].item()]
+            ]
+        )
+        scores = np.array([detection_as_xyxy[4].item(), detection_as_xyxy[4].item()])
+        norfair_detections.append(tracker.Detection(points=bbox, scores=scores))
 
     return norfair_detections
 
@@ -183,6 +167,8 @@ def main():
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
             nms_result = get_objects(result, conf_thresh, iou_thresh, top)
+            print(nms_result[0].shape)
+            exit()
 
             detections = yolo_detections_to_norfair_detections(nms_result, track_points="bbox")
 
