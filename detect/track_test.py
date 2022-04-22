@@ -168,7 +168,7 @@ def main():
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
             nms_result = get_objects(result, conf_thresh, iou_thresh, top)
 
-            detections = yolo_detections_to_norfair_detections(nms_result[0], track_points="bbox")
+            detections = yolo_detections_to_norfair_detections(nms_result, track_points="bbox")
 
             tracked_objects = track.update(detections=detections)
             drawing.draw_boxes(img, detections)
