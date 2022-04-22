@@ -9,10 +9,9 @@ from typing import Union, List, Optional
 from pycoral.utils import edgetpu
 from pycoral.adapters import common
 
-import norfair
-from norfair import Detection, Tracker, Video, Paths
-
 from objects import get_objects
+import drawing
+import tracker
 
 max_distance_between_points: int = 30
 
@@ -24,10 +23,10 @@ def center(points):
     return [np.mean(np.array(points), axis=0)]
 
 
-def yolo_detections_to_norfair_detections(yolo_detections,track_points: str = 'centroid') -> List[Detection]:
+def yolo_detections_to_norfair_detections(yolo_detections,track_points: str = 'centroid') -> List[tracker.Detection]:
     """convert detections_as_xywh to norfair detections
     """
-    norfair_detections: List[Detection] = []
+    norfair_detections: List[tracker.Detection] = []
 
     if track_points == 'centroid':
         detections_as_xywh = yolo_detections.xywh[0]
@@ -40,7 +39,7 @@ def yolo_detections_to_norfair_detections(yolo_detections,track_points: str = 'c
             )
             scores = np.array([detection_as_xywh[4].item()])
             norfair_detections.append(
-                Detection(points=centroid, scores=scores)
+                tracker.Detection(points=centroid, scores=scores)
             )
     elif track_points == 'bbox':
         detections_as_xyxy = yolo_detections.xyxy[0]
@@ -53,7 +52,7 @@ def yolo_detections_to_norfair_detections(yolo_detections,track_points: str = 'c
             )
             scores = np.array([detection_as_xyxy[4].item(), detection_as_xyxy[4].item()])
             norfair_detections.append(
-                Detection(points=bbox, scores=scores)
+                tracker.Detection(points=bbox, scores=scores)
             )
 
     return norfair_detections
@@ -152,11 +151,11 @@ def main():
     size = common.input_size(interpreter)
     
     cam = cv2.VideoCapture(args.device)
-    tracker = Tracker(
+    track = tracker.Tracker(
         distance_function=euclidean_distance,
         distance_threshold=max_distance_between_points,
     )
-    paths_drawer = Paths(center, attenuation=0.01)
+    paths_drawer = drawing.Paths(center, attenuation=0.01)
     
     while True:
         try:
@@ -187,9 +186,9 @@ def main():
 
             detections = yolo_detections_to_norfair_detections(nms_result, track_points="bbox")
 
-            tracked_objects = tracker.update(detections=detections)
-            norfair.draw_boxes(img, detections)
-            norfair.draw_tracked_objects(img, tracked_objects)
+            tracked_objects = track.update(detections=detections)
+            drawing.draw_boxes(img, detections)
+            drawing.draw_tracked_objects(img, tracked_objects)
             output_image = paths_drawer.draw(image, tracked_objects)
 
             cv2.imshow('frame', output_image)
