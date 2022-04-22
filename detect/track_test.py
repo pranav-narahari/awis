@@ -4,11 +4,59 @@ import logging
 import numpy as np
 import cv2
 import yaml
+from typing import Union, List, Optional
 
 from pycoral.utils import edgetpu
 from pycoral.adapters import common
 
+import norfair
+from norfair import Detection, Tracker, Video, Paths
+
 from objects import get_objects
+
+max_distance_between_points: int = 30
+
+def euclidean_distance(detection, tracked_object):
+    return np.linalg.norm(detection.points - tracked_object.estimate)
+
+
+def center(points):
+    return [np.mean(np.array(points), axis=0)]
+
+
+def yolo_detections_to_norfair_detections(yolo_detections,track_points: str = 'centroid') -> List[Detection]:
+    """convert detections_as_xywh to norfair detections
+    """
+    norfair_detections: List[Detection] = []
+
+    if track_points == 'centroid':
+        detections_as_xywh = yolo_detections.xywh[0]
+        for detection_as_xywh in detections_as_xywh:
+            centroid = np.array(
+                [
+                    detection_as_xywh[0].item(),
+                    detection_as_xywh[1].item()
+                ]
+            )
+            scores = np.array([detection_as_xywh[4].item()])
+            norfair_detections.append(
+                Detection(points=centroid, scores=scores)
+            )
+    elif track_points == 'bbox':
+        detections_as_xyxy = yolo_detections.xyxy[0]
+        for detection_as_xyxy in detections_as_xyxy:
+            bbox = np.array(
+                [
+                    [detection_as_xyxy[0].item(), detection_as_xyxy[1].item()],
+                    [detection_as_xyxy[2].item(), detection_as_xyxy[3].item()]
+                ]
+            )
+            scores = np.array([detection_as_xyxy[4].item(), detection_as_xyxy[4].item()])
+            norfair_detections.append(
+                Detection(points=bbox, scores=scores)
+            )
+
+    return norfair_detections
 
 def make_box(box, im, color=(128, 128, 128), txt_color=(255, 255, 255), label=None, line_width=3):
 
@@ -104,6 +152,11 @@ def main():
     size = common.input_size(interpreter)
     
     cam = cv2.VideoCapture(args.device)
+    tracker = Tracker(
+        distance_function=euclidean_distance,
+        distance_threshold=max_distance_between_points,
+    )
+    paths_drawer = Paths(center, attenuation=0.01)
     
     while True:
         try:
@@ -132,31 +185,42 @@ def main():
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
             nms_result = get_objects(result, conf_thresh, iou_thresh, top)
 
+            detections = yolo_detections_to_norfair_detections(nms_result, track_points="bbox")
 
-            if len(nms_result[0]):
-                nms_result[0][:, :4] = get_BBox(nms_result[0][:,:4], image, size)
+            tracked_objects = tracker.update(detections=detections)
+            norfair.draw_boxes(img, detections)
+            norfair.draw_tracked_objects(img, tracked_objects)
+            output_image = paths_drawer.draw(image, tracked_objects)
 
-                s = ""
+            cv2.imshow('frame', output_image)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+
+            # if len(nms_result[0]):
+            #     nms_result[0][:, :4] = get_BBox(nms_result[0][:,:4], image, size)
+
+            #     s = ""
                 
-                # Print results
-                for c in np.unique(nms_result[0][:, -1]):
-                    n = (nms_result[0][:, -1] == c).sum()
-                    s += f"{n} {labels[int(c)]}{'s' * (n > 1)}, "
+            #     # Print results
+            #     for c in np.unique(nms_result[0][:, -1]):
+            #         n = (nms_result[0][:, -1] == c).sum()
+            #         s += f"{n} {labels[int(c)]}{'s' * (n > 1)}, "
                 
-                if s != "":
-                    s = s.strip()
-                    s = s[:-1]
+            #     if s != "":
+            #         s = s.strip()
+            #         s = s[:-1]
                 
-                logger.info("Detected: {}".format(s))
+            #     logger.info("Detected: {}".format(s))
 
-                for *xyxy, conf, cls in reversed(nms_result[0]):
-                    c = int(cls)
-                    label = f'{labels[c]} {conf:.2f}'
-                    output_image = make_box(xyxy, image, label=label)
+            #     for *xyxy, conf, cls in reversed(nms_result[0]):
+            #         c = int(cls)
+            #         label = f'{labels[c]} {conf:.2f}'
+            #         output_image = make_box(xyxy, image, label=label)
 
-                cv2.imshow('frame', output_image)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    break
+            #     cv2.imshow('frame', output_image)
+            #     if cv2.waitKey(1) & 0xFF == ord('q'):
+            #         break
 
         except KeyboardInterrupt:
             break
