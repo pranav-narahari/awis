@@ -2,7 +2,6 @@ import math
 from typing import Callable, List, Optional, Sequence
 
 import numpy as np
-from rich import print
 
 def validate_points(points: np.array) -> np.array:
     # If the user is tracking only a single point, reformat it slightly.
