@@ -1,16 +1,11 @@
 from typing import Optional, Sequence, Tuple
 
-try:
-    import cv2
-except ImportError:
-    from .utils import DummyOpenCVImport
-
-    cv2 = DummyOpenCVImport()
+import cv2
 import random
 
 import numpy as np
 
-from .utils import validate_points
+from tracker import Detection, TrackedObject, validate_points
 
 
 def draw_points(
