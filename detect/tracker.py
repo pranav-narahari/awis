@@ -221,7 +221,7 @@ class TrackedObject:
                 f"\n[red]ERROR[/red]: The detection list fed into `tracker.update()` should be composed of {Detection} objects not {type(initial_detection)}.\n"
             )
             exit()
-        self.num_points = initial_detection_points.shape[0]
+        self.num_points = initial_detection_points.shape
         self.hit_inertia_min: int = hit_inertia_min
         self.hit_inertia_max: int = hit_inertia_max
         self.initialization_delay = initialization_delay
