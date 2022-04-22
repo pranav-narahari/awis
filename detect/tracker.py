@@ -81,7 +81,6 @@ class Tracker:
                     self.detection_threshold,
                     self.period,
                     self.point_transience,
-                    self.filter_setup,
                     self.past_detections_length
                 )
             )
