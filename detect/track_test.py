@@ -176,7 +176,7 @@ def main():
 
                 tracked_objects = track.update(detections=detections)
                 drawing.draw_boxes(image, detections)
-                # drawing.draw_tracked_objects(image, tracked_objects)
+                drawing.draw_tracked_objects(image, tracked_objects)
                 # output_image = paths_drawer.draw(image, tracked_objects)
 
                 s = ""
