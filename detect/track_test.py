@@ -167,6 +167,8 @@ def main():
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
             nms_result = get_objects(result, conf_thresh, iou_thresh, top)
+            nms_result.shape
+            exit()
 
             detections = yolo_detections_to_norfair_detections(nms_result, track_points="bbox")
 
