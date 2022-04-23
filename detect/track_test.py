@@ -168,13 +168,14 @@ def main():
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
             nms_result = get_objects(result, conf_thresh, iou_thresh, top)
+            print(get_BBox(nms_result[0][:,:4], image, size))
             nms_result[0][:, :4] = get_BBox(nms_result[0][:,:4], image, size)
 
             detections = yolo_detections_to_norfair_detections(nms_result, track_points="bbox")
 
-            print("====================")
-            print(detections)
-            print("====================")
+            # print("====================")
+            # print(detections)
+            # print("====================")
 
             tracked_objects = track.update(detections=detections)
             drawing.draw_boxes(img, detections)
