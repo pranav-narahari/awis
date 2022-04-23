@@ -26,6 +26,7 @@ def center(points):
 def yolo_detections_to_norfair_detections(yolo_detections,track_points: str = 'centroid') -> List[tracker.Detection]:
     """convert detections_as_xywh to norfair detections
     """
+
     norfair_detections: List[tracker.Detection] = []
 
     detections_as_xyxy = yolo_detections[0]
@@ -167,8 +168,7 @@ def main():
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
             nms_result = get_objects(result, conf_thresh, iou_thresh, top)
-            print(nms_result)
-            exit()
+            nms_result[0][:, :4] = get_BBox(nms_result[0][:,:4], image, size)
 
             detections = yolo_detections_to_norfair_detections(nms_result, track_points="bbox")
 
