@@ -277,7 +277,7 @@ class TrackedObject:
         self.point_hit_counter -= 1
         self.age += 1
         # Advances the tracker's state
-        self.filter.predict()
+
 
     @property
     def is_initializing(self):
