@@ -172,6 +172,10 @@ def main():
 
             detections = yolo_detections_to_norfair_detections(nms_result, track_points="bbox")
 
+            print("====================")
+            print(detections)
+            print("====================")
+
             tracked_objects = track.update(detections=detections)
             drawing.draw_boxes(img, detections)
             drawing.draw_tracked_objects(img, tracked_objects)
