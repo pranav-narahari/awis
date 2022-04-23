@@ -131,7 +131,6 @@ def main():
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
             nms_result = get_objects(result, conf_thresh, iou_thresh, top)
-            print(nms_result)
 
 
             if len(nms_result[0]):
@@ -149,7 +148,6 @@ def main():
                     s = s[:-1]
                 
                 logger.info("Detected: {}".format(s))
-                logger.info("Conf: {}".format(nms_result[0][:4]))
 
                 for *xyxy, conf, cls in reversed(nms_result[0]):
                     c = int(cls)
