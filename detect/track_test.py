@@ -195,7 +195,7 @@ def main():
                 for *xyxy, conf, cls in reversed(nms_result[0]):
                     c = int(cls)
                     label = f'{labels[c]} {conf:.2f}'
-                    output_image = make_box(xyxy, output_image, label=label)
+                    output_image = make_box(xyxy, image, label=label)
 
                 cv2.imshow('frame', output_image)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
