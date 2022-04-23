@@ -168,49 +168,38 @@ def main():
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
             nms_result = get_objects(result, conf_thresh, iou_thresh, top)
-            print(get_BBox(nms_result[0][:,:4], image, size))
-            nms_result[0][:, :4] = get_BBox(nms_result[0][:,:4], image, size)
 
-            detections = yolo_detections_to_norfair_detections(nms_result, track_points="bbox")
+            if len(nms_result[0]):
+                nms_result[0][:, :4] = get_BBox(nms_result[0][:,:4], image, size)
 
-            # print("====================")
-            # print(detections)
-            # print("====================")
+                detections = yolo_detections_to_norfair_detections(nms_result, track_points="bbox")
 
-            tracked_objects = track.update(detections=detections)
-            drawing.draw_boxes(img, detections)
-            drawing.draw_tracked_objects(img, tracked_objects)
-            output_image = paths_drawer.draw(image, tracked_objects)
+                tracked_objects = track.update(detections=detections)
+                drawing.draw_boxes(img, detections)
+                drawing.draw_tracked_objects(img, tracked_objects)
+                output_image = paths_drawer.draw(image, tracked_objects)
 
-            cv2.imshow('frame', output_image)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-
-
-            # if len(nms_result[0]):
-            #     nms_result[0][:, :4] = get_BBox(nms_result[0][:,:4], image, size)
-
-            #     s = ""
+                s = ""
                 
-            #     # Print results
-            #     for c in np.unique(nms_result[0][:, -1]):
-            #         n = (nms_result[0][:, -1] == c).sum()
-            #         s += f"{n} {labels[int(c)]}{'s' * (n > 1)}, "
+                # Print results
+                for c in np.unique(nms_result[0][:, -1]):
+                    n = (nms_result[0][:, -1] == c).sum()
+                    s += f"{n} {labels[int(c)]}{'s' * (n > 1)}, "
                 
-            #     if s != "":
-            #         s = s.strip()
-            #         s = s[:-1]
+                if s != "":
+                    s = s.strip()
+                    s = s[:-1]
                 
-            #     logger.info("Detected: {}".format(s))
+                logger.info("Detected: {}".format(s))
 
-            #     for *xyxy, conf, cls in reversed(nms_result[0]):
-            #         c = int(cls)
-            #         label = f'{labels[c]} {conf:.2f}'
-            #         output_image = make_box(xyxy, image, label=label)
+                for *xyxy, conf, cls in reversed(nms_result[0]):
+                    c = int(cls)
+                    label = f'{labels[c]} {conf:.2f}'
+                    output_image = make_box(xyxy, output_image, label=label)
 
-            #     cv2.imshow('frame', output_image)
-            #     if cv2.waitKey(1) & 0xFF == ord('q'):
-            #         break
+                cv2.imshow('frame', output_image)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
 
         except KeyboardInterrupt:
             break
