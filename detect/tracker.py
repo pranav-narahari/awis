@@ -7,7 +7,22 @@ def validate_points(points: np.array) -> np.array:
     # If the user is tracking only a single point, reformat it slightly.
     if points.shape == (2,):
         points = points[np.newaxis, ...]
-    return 
+    elif len(points.shape) == 1:
+        print_detection_error_message_and_exit(points)
+    else:
+        if points.shape[1] != 2 or len(points.shape) > 2:
+            print_detection_error_message_and_exit(points)
+    return points
+
+
+def print_detection_error_message_and_exit(points):
+    print("\n[red]INPUT ERROR:[/red]")
+    print(
+        f"Each `Detection` object should have a property `points` of shape (num_of_points_to_track, 2), not {points.shape}. Check your `Detection` list creation code."
+    )
+    print("You can read the documentation for the `Detection` class here:")
+    print("https://github.com/tryolabs/norfair/tree/master/docs#detection\n")
+    exit()
 
 
 class Tracker:
@@ -221,7 +236,7 @@ class TrackedObject:
                 f"\n[red]ERROR[/red]: The detection list fed into `tracker.update()` should be composed of {Detection} objects not {type(initial_detection)}.\n"
             )
             exit()
-        self.num_points = initial_detection_points.shape
+        self.num_points = initial_detection_points.shape[0]
         self.hit_inertia_min: int = hit_inertia_min
         self.hit_inertia_max: int = hit_inertia_max
         self.initialization_delay = initialization_delay
