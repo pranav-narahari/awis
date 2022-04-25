@@ -13,7 +13,7 @@ from objects import get_objects
 import drawing
 import tracker
 
-max_distance_between_points: int = 30
+max_distance_between_points: int = 100
 
 def euclidean_distance(detection, tracked_object):
     return np.linalg.norm(detection.points - tracked_object.estimate)
