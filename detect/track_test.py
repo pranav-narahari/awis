@@ -23,7 +23,7 @@ def center(points):
     return [np.mean(np.array(points), axis=0)]
 
 
-def yolo_detections_to_norfair_detections(yolo_detections,track_points: str = 'centroid') -> List[tracker.Detection]:
+def yolo_detections_to_norfair_detections(labels, yolo_detections,track_points: str = 'centroid') -> List[tracker.Detection]:
     """convert detections_as_xywh to norfair detections
     """
 
@@ -37,8 +37,9 @@ def yolo_detections_to_norfair_detections(yolo_detections,track_points: str = 'c
                 [detection_as_xyxy[2].item(), detection_as_xyxy[3].item()]
             ]
         )
+        label = labels[int(detection_as_xyxy[5].item())]
         scores = np.array([detection_as_xyxy[4].item(), detection_as_xyxy[4].item()])
-        norfair_detections.append(tracker.Detection(points=bbox, scores=scores))
+        norfair_detections.append(tracker.Detection(points=bbox, scores=scores, label=label))
 
     return norfair_detections
 
@@ -175,7 +176,7 @@ def main():
             if len(nms_result[0]):
                 nms_result[0][:, :4] = get_BBox(nms_result[0][:,:4], image, size)
 
-                detections = yolo_detections_to_norfair_detections(nms_result, track_points="bbox")
+                detections = yolo_detections_to_norfair_detections(labels, nms_result, track_points="bbox")
 
                 tracked_objects = track.update(detections=detections)
                 drawing.draw_boxes(image, detections)
@@ -198,7 +199,7 @@ def main():
                 for *xyxy, conf, cls in reversed(nms_result[0]):
                     c = int(cls)
                     label = f'{labels[c]} {conf:.2f}'
-                    # output_image = make_box(xyxy, image, label=label)
+                    output_image = make_box(xyxy, image, label=label)
 
                 cv2.imshow('frame', output_image)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
