@@ -102,6 +102,7 @@ def main():
     parser.add_argument("--labels", type=str, help="Labels file", 
                         default=os.path.join(default_model_dir,default_labels))
     parser.add_argument("--device", type=int, default=0, help="Image capture device to run live detection")
+    parser.add_argument("--video", action='store_true')
    
     args = parser.parse_args()
 
@@ -136,6 +137,8 @@ def main():
     size = common.input_size(interpreter)
     
     cam = cv2.VideoCapture(args.device)
+    if args.video:
+        cam = cv2.VideoCapture("los_angeles.mp4")
     track = tracker.Tracker(
         distance_function=euclidean_distance,
         distance_threshold=max_distance_between_points,
