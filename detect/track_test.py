@@ -179,9 +179,9 @@ def main():
                 detections = yolo_detections_to_norfair_detections(labels, nms_result, track_points="bbox")
 
                 tracked_objects = track.update(detections=detections)
-                drawing.draw_boxes(image, detections)
+                # drawing.draw_boxes(image, detections)
                 drawing.draw_tracked_objects(image, tracked_objects)
-                output_image = paths_drawer.draw(image, tracked_objects)
+                # output_image = paths_drawer.draw(image, tracked_objects)
 
                 s = ""
                 
@@ -201,7 +201,7 @@ def main():
                     label = f'{labels[c]} {conf:.2f}'
                     # output_image = make_box(xyxy, image, label=label)
 
-                cv2.imshow('frame', output_image)
+                cv2.imshow('frame', image)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
