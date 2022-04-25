@@ -42,7 +42,7 @@ def yolo_detections_to_norfair_detections(yolo_detections,track_points: str = 'c
 
     return norfair_detections
 
-def make_box(box, im, color=(128, 128, 128), txt_color=(255, 255, 255), label=None, line_width=3):
+def make_box(box, im, color=(0, 255, 0), txt_color=(255, 255, 255), label=None, line_width=2):
 
     lw = line_width or max(int(min(im.size) / 200), 2)
 
