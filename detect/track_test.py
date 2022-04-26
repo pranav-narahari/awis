@@ -93,8 +93,8 @@ logger = logging.getLogger(__name__)
 
 def main():
     default_model_dir = '../yolo_model'
-    default_model = 'yolov5s-int8-224_edgetpu.tflite'
-    default_labels = 'coco.yaml'
+    default_model = 'best-int8_edgetpu.tflite'
+    default_labels = 'AWIS.yaml'
     parser = argparse.ArgumentParser("EdgeTPU test runner")
     parser.add_argument("--model", "-m", help="weights file", 
                         default=os.path.join(default_model_dir,default_model))
