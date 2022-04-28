@@ -42,7 +42,7 @@ def obj(dets, scores, thresh):
     return np.array(keep)
 
 
-def get_objects(prediction, conf_thres, iou_thres, top, labels=()):
+def get_objects(prediction, conf_thres, iou_thres, top, classes, labels=()):
 
     nc = prediction.shape[2] - 5
     xc = prediction[..., 4] > conf_thres
@@ -56,7 +56,6 @@ def get_objects(prediction, conf_thres, iou_thres, top, labels=()):
         if labels and len(labels[xi]):
             l = labels[xi]
             v = np.zeros((len(l), nc + 5))
-            print(v[:,:4])
             v[:, :4] = l[:, 1:5]
             v[:, 4] = 1.0
             v[range(len(l)), l[:, 0].long() + 5] = 1.0
@@ -72,6 +71,10 @@ def get_objects(prediction, conf_thres, iou_thres, top, labels=()):
         conf = np.amax(x[:, 5:], axis=1, keepdims=True)
         j = np.argmax(x[:, 5:], axis=1).reshape(conf.shape)
         x = np.concatenate((box, conf, j.astype(float)), axis=1)[conf.flatten() > conf_thres]
+
+        # Filter by class
+        if classes is not None:
+            x = x[(x[:, 5:6] == np.array(classes)).any(1)]
 
         n = x.shape[0]
         if not n:
