@@ -16,6 +16,8 @@ import tracker
 max_distance_between_points: int = 100
 
 def euclidean_distance(detection, tracked_object):
+    print("decttion points", detection.points)
+    print("track points", tracked_object.estimate)
     return np.linalg.norm(detection.points - tracked_object.estimate)
 
 

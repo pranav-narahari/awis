@@ -187,7 +187,7 @@ class Tracker:
                 exit()
 
             # Used just for debugging distance function
-            print("Distance Matrix: ", distance_matrix)
+            # print("Distance Matrix: ", distance_matrix)
             if distance_matrix.any():
                 for i, minimum in enumerate(distance_matrix.min(axis=0)):
                     objects[i].current_min_distance = (
