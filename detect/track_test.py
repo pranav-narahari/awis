@@ -180,6 +180,20 @@ def main():
                 detections = yolo_detections_to_norfair_detections(labels, nms_result, track_points="bbox")
 
                 tracked_objects = track.update(detections=detections)
+                print("===================================")
+                for obj in tracked_objects:
+                    print("*********************************")
+                    print("Label: ", obj.label)
+                    print("Label: ", obj.last_detection.label)
+                    print("Score: ", obj.last_detection.scores)
+                    print("ID: ", obj.id)
+                    print("Hit counter: ", obj.hit_counter)
+                    print("Point hit counter: ", obj.point_hit_counter)
+                    print("Age: ", obj.age)
+                    print("Inertia min: ",obj.hit_inertia_min)
+                    print("Inertia min: ",obj.hit_inertia_max)
+                    print("*********************************")
+                print("===================================")
                 # drawing.draw_boxes(image, detections)
                 drawing.draw_tracked_objects(image, tracked_objects)
                 # output_image = paths_drawer.draw(image, tracked_objects)
@@ -203,7 +217,7 @@ def main():
                     # output_image = make_box(xyxy, image, label=label)
 
                 cv2.imshow("frame", image)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
+                if cv2.waitKey(0) & 0xFF == ord('q'):
                     break
 
             else:
