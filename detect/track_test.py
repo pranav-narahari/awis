@@ -104,7 +104,7 @@ def main():
                         default=os.path.join(default_model_dir,default_labels))
     parser.add_argument("--device", type=int, default=0, help="Image capture device to run live detection")
     parser.add_argument("--video", action='store_true')
-    parser.add_argument("--filter", type=str, default="", help="Classes to show")
+    parser.add_argument("--filter", type=str, default=None, help="Classes to show")
    
     args = parser.parse_args()
 
