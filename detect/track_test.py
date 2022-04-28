@@ -207,7 +207,7 @@ def main():
 
             else:
                 cv2.imshow("frame", image)
-                if cv2.waitkey(1) & 0xFF == ord('q'):
+                if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
         except KeyboardInterrupt:
