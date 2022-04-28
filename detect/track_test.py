@@ -93,8 +93,8 @@ logger = logging.getLogger(__name__)
 
 def main():
     default_model_dir = '../yolo_model'
-    default_model = 'best-int8_edgetpu.tflite'
-    default_labels = 'AWIS.yaml'
+    default_model = 'yolov5s-int8-224_edgetpu.tflite'
+    default_labels = 'coco.yaml'
     parser = argparse.ArgumentParser("EdgeTPU test runner")
     parser.add_argument("--model", "-m", help="weights file", 
                         default=os.path.join(default_model_dir,default_model))
@@ -104,6 +104,7 @@ def main():
                         default=os.path.join(default_model_dir,default_labels))
     parser.add_argument("--device", type=int, default=0, help="Image capture device to run live detection")
     parser.add_argument("--video", action='store_true')
+    parser.add_argument("--filter", type=str, default="", help="Classes to show")
    
     args = parser.parse_args()
 
@@ -171,7 +172,7 @@ def main():
             interpreter.invoke()
             interpreter_output = interpreter.get_tensor(output_details[0]["index"])
             result = output_scale * (interpreter_output.astype('float32') - output_zero_point)
-            nms_result = get_objects(result, conf_thresh, iou_thresh, top)
+            nms_result = get_objects(result, conf_thresh, iou_thresh, top, args.filter)
 
             if len(nms_result[0]):
                 nms_result[0][:, :4] = get_BBox(nms_result[0][:,:4], image, size)
