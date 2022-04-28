@@ -56,7 +56,7 @@ def get_objects(prediction, conf_thres, iou_thres, top, labels=()):
         if labels and len(labels[xi]):
             l = labels[xi]
             v = np.zeros((len(l), nc + 5))
-            print(v)
+            print(v[:,:4])
             v[:, :4] = l[:, 1:5]
             v[:, 4] = 1.0
             v[range(len(l)), l[:, 0].long() + 5] = 1.0
