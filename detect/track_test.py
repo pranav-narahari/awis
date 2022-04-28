@@ -201,8 +201,13 @@ def main():
                     label = f'{labels[c]} {conf:.2f}'
                     # output_image = make_box(xyxy, image, label=label)
 
-                cv2.imshow('frame', image)
+                cv2.imshow("frame", image)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
+
+            else:
+                cv2.imshow("frame", image)
+                if cv2.waitkey(1) & 0xFF == ord('q'):
                     break
 
         except KeyboardInterrupt:
