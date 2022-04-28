@@ -74,7 +74,7 @@ def get_objects(prediction, conf_thres, iou_thres, top, classes, labels=()):
 
         # Filter by class
         if classes is not None:
-            print(x[:, 5:6])
+            print(np.array(classes))
             x = x[(x[:, 5:6] == np.array(classes)).any(1)]
 
         n = x.shape[0]
