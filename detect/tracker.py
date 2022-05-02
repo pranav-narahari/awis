@@ -75,7 +75,8 @@ class Tracker:
         detection_threshold: float = 0,
         point_transience: int = 4,
         filter_setup: "FilterSetup" = FilterSetup(),
-        past_detections_length: int = 4
+        past_detections_length: int = 4,
+        moved: bool = False
     ):
         self.tracked_objects: Sequence["TrackedObject"] = []
         self.distance_function = distance_function
@@ -104,6 +105,7 @@ class Tracker:
         self.distance_threshold = distance_threshold
         self.detection_threshold = detection_threshold
         self.point_transience = point_transience
+        self.moved = moved
         TrackedObject.count = 0
 
     def update(self, detections: Optional[List["Detection"]] = None, period: int = 1):
@@ -166,6 +168,10 @@ class Tracker:
                     # dont force the hungarian algorithm to minimize them and therefore
                     # introduce the possibility of sub optimal results.
                     # Note: This is probably not needed with the new distance minimizing algorithm
+                    if distance > 30:
+                        obj.moved = True
+                    else:
+                        obj.moved = False
                     if distance > self.distance_threshold:
                         distance_matrix[d, o] = self.distance_threshold + 1
                     else:
@@ -271,7 +277,8 @@ class TrackedObject:
         period: int,
         point_transience: int,
         filter_setup: "FilterSetup",
-        past_detections_length: int
+        past_detections_length: int,
+        moved: bool
     ):
         try:
             initial_detection_points = validate_points(initial_detection.points)
@@ -316,6 +323,7 @@ class TrackedObject:
         self.filter = filter_setup.create_filter(initial_detection_points)
         self.dim_z = 2 * self.num_points
         self.label = initial_detection.label
+        self.moved = moved
 
     def tracker_step(self):
         self.hit_counter -= 1

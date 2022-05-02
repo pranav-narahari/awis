@@ -194,6 +194,7 @@ def main():
                     print("Age: ", obj.age)
                     print("Inertia min: ",obj.hit_inertia_min)
                     print("Inertia min: ",obj.hit_inertia_max)
+                    print("Moved: ", obj.moved)
                     print("*********************************")
                 print("===================================")
                 # drawing.draw_boxes(image, detections)
@@ -219,7 +220,7 @@ def main():
                     # output_image = make_box(xyxy, image, label=label)
 
                 cv2.imshow("frame", image)
-                if cv2.waitKey(0) & 0xFF == ord('q'):
+                if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
             else:
