@@ -141,6 +141,10 @@ def main():
     size = common.input_size(interpreter)
     
     cam = cv2.VideoCapture(args.device)
+    frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH ))
+    frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT ))
+    print("Width", frame_width)
+    print("Height", frame_height)
     if args.video:
         cam = cv2.VideoCapture("los_angeles.mp4")
     track = tracker.Tracker(
