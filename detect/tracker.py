@@ -1,4 +1,5 @@
 import math
+from re import M
 from typing import Callable, List, Optional, Sequence
 
 import numpy as np
@@ -140,7 +141,8 @@ class Tracker:
                     self.period,
                     self.point_transience,
                     self.filter_setup,
-                    self.past_detections_length
+                    self.past_detections_length,
+                    self.moved
                 )
             )
 
