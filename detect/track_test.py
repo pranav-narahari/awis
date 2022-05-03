@@ -228,7 +228,7 @@ def main():
                 print("===================================")
                 # drawing.draw_boxes(image, detections)
                 drawing.draw_tracked_objects(image, tracked_objects)
-                for obj in tracked_objects: container_count+=1 if centroid(obj.last_detection.points)[1]>445 else None
+                for obj in tracked_objects: container_count+=1 if centroid(obj.last_detection.points)[1]>445 else 0
                 # container_count= ((container_count + 1) for obj in tracked_objects if centroid(obj.last_detection.points)[1]>445)
                 print("Count: ", container_count)
                 # output_image = paths_drawer.draw(image, tracked_objects)
