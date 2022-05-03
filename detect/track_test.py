@@ -210,15 +210,16 @@ def main():
                     s = s[:-1]
                 
                 logger.info("Detected: {}".format(s))
+                print("Tracked objects count: ", tracked_objects.count)
                 for obj in tracked_objects:
                     print("*********************************")
                     print("Label: ", obj.last_detection.label)
-                    print("Active: ", obj.detected_at_least_once_points)
+                    # print("Active: ", obj.detected_at_least_once_points)
                 #     print("Score: ", obj.last_detection.scores)
                     print("ID: ", obj.id)
-                    print("Hit counter: ", obj.hit_counter)
-                    print("Point hit counter: ", obj.point_hit_counter)
-                    print("Age: ", obj.age)
+                    # print("Hit counter: ", obj.hit_counter)
+                    # print("Point hit counter: ", obj.point_hit_counter)
+                    # print("Age: ", obj.age)
                 #     print("Inertia min: ",obj.hit_inertia_min)
                 #     print("Inertia min: ",obj.hit_inertia_max)
                 #     print("Moved: ", obj.moved)
@@ -230,7 +231,7 @@ def main():
                 # drawing.draw_boxes(image, detections)
                 drawing.draw_tracked_objects(image, tracked_objects)
                 for obj in tracked_objects: container_count+=1 if centroid(obj.last_detection.points)[1]>445 else 0
-                print("Count: ", container_count)
+                # print("Count: ", container_count)
                 # output_image = paths_drawer.draw(image, tracked_objects)
 
                 # for *xyxy, conf, cls in reversed(nms_result[0]):
