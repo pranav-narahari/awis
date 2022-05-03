@@ -210,6 +210,11 @@ def main():
                     s = s[:-1]
                 
                 logger.info("Detected: {}".format(s))
+                print("Tracked objects count: ", tracked_objects.count)
+                exit()
+                for det in detections:
+                    print("*********************************")
+
                 # for obj in tracked_objects:
                 #     print("*********************************")
                 #     print("Label: ", obj.last_detection.label)
@@ -239,7 +244,6 @@ def main():
                 #     output_image = make_box(xyxy, image, label=label)
 
 
-                drawing.draw_tracked_objects(image, detections)
                 drawing.draw_tracked_objects(image, tracked_objects)
                 for obj in tracked_objects: container_count+=1 if centroid(obj.last_detection.points)[1]>445 else 0
                 image = cv2.line(image, (0,445), (frame_width, 445), (0,0,0), 1)
