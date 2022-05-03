@@ -238,6 +238,7 @@ def main():
                 #     label = f'{labels[c]} {conf:.2f}'
                 #     output_image = make_box(xyxy, image, label=label)
 
+                image = cv2.line(image, (0,445), (frame_width, 445), (0,0,0), 1)
                 cv2.imshow("frame", image)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
