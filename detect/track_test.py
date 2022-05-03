@@ -161,6 +161,7 @@ def main():
         distance_threshold=max_distance_between_points,
     )
     paths_drawer = drawing.Paths(center, attenuation=0.01)
+    container_count= 0
     
     while True:
         try:
@@ -221,17 +222,19 @@ def main():
                 #     print("Inertia min: ",obj.hit_inertia_max)
                 #     print("Moved: ", obj.moved)
                 #     print("Points: ", obj.last_detection.points)
-                    print("Centroid: ", centroid(obj.last_detection.points))
+                    centroidXY = centroid(obj.last_detection.points)
+                    print("Centroid: ", centroidXY)
+                    print("Centroid y: ", centroidXY[1])
                     print("*********************************")
                 print("===================================")
                 # drawing.draw_boxes(image, detections)
                 drawing.draw_tracked_objects(image, tracked_objects)
                 # output_image = paths_drawer.draw(image, tracked_objects)
 
-                for *xyxy, conf, cls in reversed(nms_result[0]):
-                    c = int(cls)
-                    label = f'{labels[c]} {conf:.2f}'
-                    # output_image = make_box(xyxy, image, label=label)
+                # for *xyxy, conf, cls in reversed(nms_result[0]):
+                #     c = int(cls)
+                #     label = f'{labels[c]} {conf:.2f}'
+                #     output_image = make_box(xyxy, image, label=label)
 
                 cv2.imshow("frame", image)
                 if cv2.waitKey(0) & 0xFF == ord('q'):
