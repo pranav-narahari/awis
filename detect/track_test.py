@@ -210,11 +210,10 @@ def main():
                     s = s[:-1]
                 
                 logger.info("Detected: {}".format(s))
-                print("Tracked objects count: ", tracked_objects.count)
                 for obj in tracked_objects:
                     print("*********************************")
                     print("Label: ", obj.last_detection.label)
-                    # print("Active: ", obj.detected_at_least_once_points)
+                    print("Active: ", obj.live_points)
                 #     print("Score: ", obj.last_detection.scores)
                     print("ID: ", obj.id)
                     # print("Hit counter: ", obj.hit_counter)
