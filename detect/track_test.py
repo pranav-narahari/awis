@@ -200,7 +200,7 @@ def main():
                 #     print("Label: ", obj.label)
                     print("Label: ", obj.last_detection.label)
                 #     print("Score: ", obj.last_detection.scores)
-                #     print("ID: ", obj.id)
+                    print("ID: ", obj.id)
                 #     print("Hit counter: ", obj.hit_counter)
                 #     print("Point hit counter: ", obj.point_hit_counter)
                 #     print("Age: ", obj.age)
