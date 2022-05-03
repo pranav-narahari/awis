@@ -22,9 +22,9 @@ def centroid(tracked_points: np.array) -> Tuple[int, int]:
     return int(sum_x / num_points), int(sum_y / num_points)
 
 def euclidean_distance(detection, tracked_object):
-    print("detetion points", detection.points)
-    print("track points", tracked_object.estimate)
-    print("Distance: ", np.linalg.norm(detection.points - tracked_object.estimate))
+    # print("detetion points", detection.points)
+    # print("track points", tracked_object.estimate)
+    # print("Distance: ", np.linalg.norm(detection.points - tracked_object.estimate))
     return np.linalg.norm(detection.points - tracked_object.estimate)
 
 
@@ -213,6 +213,7 @@ def main():
                 for obj in tracked_objects:
                     print("*********************************")
                     print("Label: ", obj.last_detection.label)
+                    print("Active: ", obj.detected_at_least_once_points)
                 #     print("Score: ", obj.last_detection.scores)
                     print("ID: ", obj.id)
                     print("Hit counter: ", obj.hit_counter)
@@ -229,7 +230,6 @@ def main():
                 # drawing.draw_boxes(image, detections)
                 drawing.draw_tracked_objects(image, tracked_objects)
                 for obj in tracked_objects: container_count+=1 if centroid(obj.last_detection.points)[1]>445 else 0
-                # container_count= ((container_count + 1) for obj in tracked_objects if centroid(obj.last_detection.points)[1]>445)
                 print("Count: ", container_count)
                 # output_image = paths_drawer.draw(image, tracked_objects)
 
