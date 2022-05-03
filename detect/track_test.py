@@ -194,7 +194,20 @@ def main():
                 detections = yolo_detections_to_norfair_detections(labels, nms_result, track_points="bbox")
 
                 tracked_objects = track.update(detections=detections)
+                
                 print("===================================")
+                s = ""
+                
+                # Print results
+                for c in np.unique(nms_result[0][:, -1]):
+                    n = (nms_result[0][:, -1] == c).sum()
+                    s += f"{n} {labels[int(c)]}{'s' * (n > 1)}, "
+                
+                if s != "":
+                    s = s.strip()
+                    s = s[:-1]
+                
+                logger.info("Detected: {}".format(s))
                 for obj in tracked_objects:
                     print("*********************************")
                 #     print("Label: ", obj.label)
@@ -214,19 +227,6 @@ def main():
                 # drawing.draw_boxes(image, detections)
                 drawing.draw_tracked_objects(image, tracked_objects)
                 # output_image = paths_drawer.draw(image, tracked_objects)
-
-                s = ""
-                
-                # Print results
-                for c in np.unique(nms_result[0][:, -1]):
-                    n = (nms_result[0][:, -1] == c).sum()
-                    s += f"{n} {labels[int(c)]}{'s' * (n > 1)}, "
-                
-                if s != "":
-                    s = s.strip()
-                    s = s[:-1]
-                
-                logger.info("Detected: {}".format(s))
 
                 for *xyxy, conf, cls in reversed(nms_result[0]):
                     c = int(cls)
