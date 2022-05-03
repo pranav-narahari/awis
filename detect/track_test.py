@@ -210,27 +210,26 @@ def main():
                     s = s[:-1]
                 
                 logger.info("Detected: {}".format(s))
-                for obj in tracked_objects:
-                    print("*********************************")
-                    print("Label: ", obj.last_detection.label)
-                    print("Live: ", obj.live_points)
+                # for obj in tracked_objects:
+                #     print("*********************************")
+                #     print("Label: ", obj.last_detection.label)
+                #     print("Live: ", obj.live_points)
                 #     print("Score: ", obj.last_detection.scores)
-                    print("ID: ", obj.id)
-                    print("Hit counter: ", obj.hit_counter)
-                    print("Point hit counter: ", obj.point_hit_counter)
-                    print("Age: ", obj.age)
-                    print("Inertia min: ",obj.hit_inertia_min)
-                    print("Inertia min: ",obj.hit_inertia_max)
+                #     print("ID: ", obj.id)
+                #     print("Hit counter: ", obj.hit_counter)
+                #     print("Point hit counter: ", obj.point_hit_counter)
+                #     print("Age: ", obj.age)
+                #     print("Inertia min: ",obj.hit_inertia_min)
+                #     print("Inertia min: ",obj.hit_inertia_max)
                 #     print("Moved: ", obj.moved)
                 #     print("Points: ", obj.last_detection.points)
-                    centroidXY = centroid(obj.last_detection.points)
-                    print("Centroid y: ", centroidXY[1])
-                    print("Info: ", obj.__repr__)
-                    print("*********************************")
-                print("===================================")
+                #     centroidXY = centroid(obj.last_detection.points)
+                #     print("Centroid y: ", centroidXY[1])
+                #     print("Info: ", obj.__repr__)
+                #     print("*********************************")
+                # print("===================================")
                 # drawing.draw_boxes(image, detections)
-                drawing.draw_tracked_objects(image, tracked_objects)
-                for obj in tracked_objects: container_count+=1 if centroid(obj.last_detection.points)[1]>445 else 0
+
                 # print("Count: ", container_count)
                 # output_image = paths_drawer.draw(image, tracked_objects)
 
@@ -239,6 +238,9 @@ def main():
                 #     label = f'{labels[c]} {conf:.2f}'
                 #     output_image = make_box(xyxy, image, label=label)
 
+
+                drawing.draw_tracked_objects(image, tracked_objects)
+                for obj in tracked_objects: container_count+=1 if centroid(obj.last_detection.points)[1]>445 else 0
                 image = cv2.line(image, (0,445), (frame_width, 445), (0,0,0), 1)
                 cv2.imshow("frame", image)
                 if cv2.waitKey(0) & 0xFF == ord('q'):
