@@ -22,8 +22,9 @@ def centroid(tracked_points: np.array) -> Tuple[int, int]:
     return int(sum_x / num_points), int(sum_y / num_points)
 
 def euclidean_distance(detection, tracked_object):
-    # print("detetion points", detection.points)
-    # print("track points", tracked_object.estimate)
+    print("detetion points", detection.points)
+    print("track points", tracked_object.estimate)
+    print("Distance: ", np.linalg.norm(detection.points - tracked_object.estimate))
     return np.linalg.norm(detection.points - tracked_object.estimate)
 
 
@@ -210,13 +211,12 @@ def main():
                 logger.info("Detected: {}".format(s))
                 for obj in tracked_objects:
                     print("*********************************")
-                #     print("Label: ", obj.label)
                     print("Label: ", obj.last_detection.label)
                 #     print("Score: ", obj.last_detection.scores)
                     print("ID: ", obj.id)
-                #     print("Hit counter: ", obj.hit_counter)
-                #     print("Point hit counter: ", obj.point_hit_counter)
-                #     print("Age: ", obj.age)
+                    print("Hit counter: ", obj.hit_counter)
+                    print("Point hit counter: ", obj.point_hit_counter)
+                    print("Age: ", obj.age)
                 #     print("Inertia min: ",obj.hit_inertia_min)
                 #     print("Inertia min: ",obj.hit_inertia_max)
                 #     print("Moved: ", obj.moved)
@@ -234,7 +234,7 @@ def main():
                     # output_image = make_box(xyxy, image, label=label)
 
                 cv2.imshow("frame", image)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
+                if cv2.waitKey(0) & 0xFF == ord('q'):
                     break
 
             else:
