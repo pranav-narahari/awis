@@ -4,7 +4,7 @@ import logging
 import numpy as np
 import cv2
 import yaml
-from typing import Union, List, Optional
+from typing import Union, List, Optional, Tuple
 
 from pycoral.utils import edgetpu
 from pycoral.adapters import common
@@ -14,6 +14,12 @@ import drawing
 import tracker
 
 max_distance_between_points: int = 100
+
+def centroid(tracked_points: np.array) -> Tuple[int, int]:
+    num_points = tracked_points.shape[0]
+    sum_x = np.sum(tracked_points[:, 0])
+    sum_y = np.sum(tracked_points[:, 1])
+    return int(sum_x / num_points), int(sum_y / num_points)
 
 def euclidean_distance(detection, tracked_object):
     print("decttion points", detection.points)
@@ -95,8 +101,8 @@ logger = logging.getLogger(__name__)
 
 def main():
     default_model_dir = '../yolo_model'
-    default_model = 'yolov5s-int8-224_edgetpu.tflite'
-    default_labels = 'coco.yaml'
+    default_model = 'best-int8_edgetpu.tflite'
+    default_labels = 'AWIS.yaml'
     parser = argparse.ArgumentParser("EdgeTPU test runner")
     parser.add_argument("--model", "-m", help="weights file", 
                         default=os.path.join(default_model_dir,default_model))
@@ -105,7 +111,7 @@ def main():
     parser.add_argument("--labels", type=str, help="Labels file", 
                         default=os.path.join(default_model_dir,default_labels))
     parser.add_argument("--device", type=int, default=0, help="Image capture device to run live detection")
-    parser.add_argument("--video", action='store_true')
+    parser.add_argument("--video", type=str, default="", help="Video file name")
     parser.add_argument("--filter", type=str, default=None, help="Classes to show")
    
     args = parser.parse_args()
@@ -145,8 +151,8 @@ def main():
     frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT ))
     print("Width", frame_width)
     print("Height", frame_height)
-    if args.video:
-        cam = cv2.VideoCapture("los_angeles.mp4")
+    if args.video == "":
+        cam = cv2.VideoCapture("videos/video1.avi")
     track = tracker.Tracker(
         distance_function=euclidean_distance,
         distance_threshold=max_distance_between_points,
@@ -199,6 +205,8 @@ def main():
                     print("Inertia min: ",obj.hit_inertia_min)
                     print("Inertia min: ",obj.hit_inertia_max)
                     print("Moved: ", obj.moved)
+                    print("Points: ", obj.last_detection.points)
+                    print("Centroid: ", centroid(obj.last_detection.points))
                     print("*********************************")
                 print("===================================")
                 # drawing.draw_boxes(image, detections)
