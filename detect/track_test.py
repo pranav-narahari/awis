@@ -194,11 +194,11 @@ def main():
                 detections = yolo_detections_to_norfair_detections(labels, nms_result, track_points="bbox")
 
                 tracked_objects = track.update(detections=detections)
-                # print("===================================")
-                # for obj in tracked_objects:
-                #     print("*********************************")
+                print("===================================")
+                for obj in tracked_objects:
+                    print("*********************************")
                 #     print("Label: ", obj.label)
-                #     print("Label: ", obj.last_detection.label)
+                    print("Label: ", obj.last_detection.label)
                 #     print("Score: ", obj.last_detection.scores)
                 #     print("ID: ", obj.id)
                 #     print("Hit counter: ", obj.hit_counter)
@@ -208,9 +208,9 @@ def main():
                 #     print("Inertia min: ",obj.hit_inertia_max)
                 #     print("Moved: ", obj.moved)
                 #     print("Points: ", obj.last_detection.points)
-                #     print("Centroid: ", centroid(obj.last_detection.points))
-                #     print("*********************************")
-                # print("===================================")
+                    print("Centroid: ", centroid(obj.last_detection.points))
+                    print("*********************************")
+                print("===================================")
                 # drawing.draw_boxes(image, detections)
                 drawing.draw_tracked_objects(image, tracked_objects)
                 # output_image = paths_drawer.draw(image, tracked_objects)
