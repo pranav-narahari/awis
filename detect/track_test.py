@@ -152,7 +152,9 @@ def main():
     print("Width", frame_width)
     print("Height", frame_height)
     if args.video == "":
-        cam = cv2.VideoCapture("videos/video1.avi")
+        cam = cv2.VideoCapture("/media/usb-drive/videos/video1.avi")
+    else:
+        cam = cv2.VideoCapture(args.video)
     track = tracker.Tracker(
         distance_function=euclidean_distance,
         distance_threshold=max_distance_between_points,
@@ -237,7 +239,7 @@ def main():
 
             else:
                 cv2.imshow("frame", image)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
+                if cv2.waitKey(0) & 0xFF == ord('q'):
                     break
 
         except KeyboardInterrupt:
