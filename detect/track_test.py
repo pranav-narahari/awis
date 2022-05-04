@@ -13,7 +13,7 @@ from objects import get_objects
 import drawing
 import tracker
 
-max_distance_between_points: int = 30
+max_distance_between_points: int = 50
 Y_threshold = 450
 DD_width = 250
 
@@ -152,8 +152,8 @@ def main():
     cam = cv2.VideoCapture(args.device)
     frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH ))
     frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT ))
-    print("Width", frame_width)
-    print("Height", frame_height)
+    # print("Width", frame_width)
+    # print("Height", frame_height)
     X_threshold_left = int((frame_width-DD_width)/2)
     X_threshold_right = int((frame_width+DD_width)/2)
     if args.video == "":
@@ -218,29 +218,13 @@ def main():
 
 
                 for obj in tracked_objects:
-                    # print("===================================")
                     centroidXY = centroid(obj.last_detection.points)
                     if centroidXY[1] >= Y_threshold and centroidXY[0]>=X_threshold_left and centroidXY[0<=X_threshold_left]:
                         if not obj.live_points.any():
                             if obj.hit_counter < obj.hit_inertia_min:
                                 container_count+=1
-                    # if obj.id == 5:
-                    #     print("*********************************")
-                    #     print("Label: ", obj.last_detection.label)
-                    #     print("Live: ", obj.live_points)
-                    #     print("Score: ", obj.last_detection.scores)
-                    #     print("ID: ", obj.id)
-                    #     print("Hit counter: ", obj.hit_counter)
-                    #     print("Point hit counter: ", obj.point_hit_counter)
-                    #     print("Points: ", obj.last_detection.points)
-                    #     centroidY = centroid(obj.last_detection.points)[1]
-                    #     print("Centroid y: ", centroidY)
-                    #     print("*********************************")
-                # print("===================================")
 
                 # drawing.draw_boxes(image, detections)
-
-                # print("Count: ", container_count)
                 # output_image = paths_drawer.draw(image, tracked_objects)
 
                 # for *xyxy, conf, cls in reversed(nms_result[0]):
