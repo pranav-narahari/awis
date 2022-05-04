@@ -8,11 +8,8 @@ from filterpy.kalman import KalmanFilter
 
 def validate_points(points: np.array) -> np.array:
     # If the user is tracking only a single point, reformat it slightly.
-    print("points.shape: ", points.shape)
     if points.shape == (2,):
-        print("Points shape before: ", points.shape)
         points = points[np.newaxis, ...]
-        print("Points shape after: ", points.shape)
     elif len(points.shape) == 1:
         print_detection_error_message_and_exit(points)
     else:
@@ -121,6 +118,7 @@ class Tracker:
 
         # Update tracker
         for obj in self.tracked_objects:
+            print("Entered")
             obj.tracker_step()
 
         # Update initialized tracked objects with detections
@@ -286,7 +284,6 @@ class TrackedObject:
         past_detections_length: int,
         moved: bool
     ):
-        print("Entered")
         try:
             initial_detection_points = validate_points(initial_detection.points)
         except AttributeError:
