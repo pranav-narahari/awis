@@ -214,7 +214,10 @@ def main():
 
 
                 for i, obj in enumerate(tracked_objects):
-                    print(i)
+                    print("------------")
+                    print("i", i)
+                    print("ID", obj.id)
+                    print("------------")
                     # if obj.id == 5:
                     #     print("*********************************")
                     #     print("Label: ", obj.last_detection.label)
