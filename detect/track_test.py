@@ -13,7 +13,7 @@ from objects import get_objects
 import drawing
 import tracker
 
-max_distance_between_points: int = 100
+max_distance_between_points: int = 50
 
 def centroid(tracked_points: np.array) -> Tuple[int, int]:
     num_points = tracked_points.shape[0]

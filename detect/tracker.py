@@ -155,14 +155,10 @@ class Tracker:
         detections: Optional[List["Detection"]],
     ):
         if detections is not None and len(detections) > 0:
-            print("entered")
             distance_matrix = np.ones((len(detections), len(objects)), dtype=np.float32)
-            print("Distance matrix: ", distance_matrix.shape)
             distance_matrix *= self.distance_threshold + 1
-            print("Distance matrix: ", distance_matrix)
             for d, detection in enumerate(detections):
                 for o, obj in enumerate(objects):
-                    print("Entered")
                     if detection.label != obj.label:
                         distance_matrix[d, o] = self.distance_threshold + 1
                         if (detection.label is None) or (obj.label is None):
