@@ -118,6 +118,7 @@ class Tracker:
 
         # Update tracker
         for obj in self.tracked_objects:
+            print(self.period)
             print("Entered")
             obj.tracker_step()
 
