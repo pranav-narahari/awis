@@ -161,6 +161,7 @@ class Tracker:
         objects: Sequence["TrackedObject"],
         detections: Optional[List["Detection"]],
     ):
+        print("I'm here first")
         if detections is not None and len(detections) > 0:
             distance_matrix = np.ones((len(detections), len(objects)), dtype=np.float32)
             distance_matrix *= self.distance_threshold + 1
