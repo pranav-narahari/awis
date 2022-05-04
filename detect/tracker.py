@@ -353,7 +353,6 @@ class TrackedObject:
     def estimate(self):
         positions = self.filter.x.T.flatten()[: self.dim_z].reshape(-1, 2)
         velocities = self.filter.x.T.flatten()[self.dim_z :].reshape(-1, 2)
-        print("Velocity", velocities)
         return positions
 
     @property

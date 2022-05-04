@@ -213,27 +213,19 @@ def main():
                 logger.info("Detected: {}".format(s))
 
 
-                # for det in detections:
-                #     print("*********************************")
-
-                # for obj in tracked_objects:
-                #     print("*********************************")
-                #     print("Label: ", obj.last_detection.label)
-                #     print("Live: ", obj.live_points)
-                #     print("Score: ", obj.last_detection.scores)
-                #     print("ID: ", obj.id)
-                #     print("Hit counter: ", obj.hit_counter)
-                #     print("Point hit counter: ", obj.point_hit_counter)
-                #     print("Age: ", obj.age)
-                #     print("Inertia min: ",obj.hit_inertia_min)
-                #     print("Inertia min: ",obj.hit_inertia_max)
-                #     print("Moved: ", obj.moved)
-                #     print("Points: ", obj.last_detection.points)
-                #     centroidXY = centroid(obj.last_detection.points)
-                #     print("Centroid y: ", centroidXY[1])
-                #     print("Info: ", obj.__repr__)
-                #     print("*********************************")
-                # print("===================================")
+                for obj in tracked_objects:
+                    print("*********************************")
+                    print("Label: ", obj.last_detection.label)
+                    print("Live: ", obj.live_points)
+                    print("Score: ", obj.last_detection.scores)
+                    print("ID: ", obj.id)
+                    print("Hit counter: ", obj.hit_counter)
+                    print("Point hit counter: ", obj.point_hit_counter)
+                    print("Points: ", obj.last_detection.points)
+                    centroidXY = centroid(obj.last_detection.points)
+                    print("Centroid y: ", centroidXY[1])
+                    print("Info: ", obj.__repr__)
+                    print("*********************************")
                 # drawing.draw_boxes(image, detections)
 
                 # print("Count: ", container_count)
