@@ -290,6 +290,7 @@ class TrackedObject:
         past_detections_length: int,
         moved: bool
     ):
+        print("I'm here")
         try:
             initial_detection_points = validate_points(initial_detection.points)
         except AttributeError:
