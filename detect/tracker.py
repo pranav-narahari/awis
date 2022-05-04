@@ -330,9 +330,16 @@ class TrackedObject:
         self.moved = moved
 
     def tracker_step(self):
+        print("=============")
+        print(self.hit_counter)
+        print(self.point_hit_counter)
+        print(self.age)
         self.hit_counter -= 1
         self.point_hit_counter -= 1
         self.age += 1
+        print(self.hit_counter)
+        print(self.point_hit_counter)
+        print(self.age)
         # Advances the tracker's state
         self.filter.predict()
 
