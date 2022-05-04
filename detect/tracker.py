@@ -161,6 +161,7 @@ class Tracker:
             for d, detection in enumerate(detections):
                 for o, obj in enumerate(objects):
                     if detection.label != obj.label:
+                        print("Entered")
                         distance_matrix[d, o] = self.distance_threshold + 1
                         if (detection.label is None) or (obj.label is None):
                             print(
@@ -330,16 +331,9 @@ class TrackedObject:
         self.moved = moved
 
     def tracker_step(self):
-        print("=============")
-        print(self.hit_counter)
-        print(self.point_hit_counter)
-        print(self.age)
         self.hit_counter -= 1
         self.point_hit_counter -= 1
         self.age += 1
-        print(self.hit_counter)
-        print(self.point_hit_counter)
-        print(self.age)
         # Advances the tracker's state
         self.filter.predict()
 
