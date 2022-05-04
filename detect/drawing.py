@@ -101,14 +101,10 @@ def draw_tracked_objects(
             c1, c2 = (int(points[0][0]), int(points[0][1])), (int(points[1][0]), int(points[1][1]))
             cv2.rectangle(frame, c1, c2, id_color, thickness=lw, lineType=cv2.LINE_AA)
             tf = max(lw - 1, 1)
-            # print("DATA")
-            # print(obj.last_detection.label)
-            # print(obj.last_detection.scores)
-            # print(obj.id)
             label = f'{obj.last_detection.label} {obj.last_detection.scores[0]:.2f} {obj.id:}'
             txt_width, txt_height = cv2.getTextSize(label, 0, fontScale=lw / 3, thickness=tf)[0]
             c2 = c1[0] + txt_width, c1[1] - txt_height - 3
-            cv2.rectangle(frame, c1, c2, color, -1, cv2.LINE_AA)
+            cv2.rectangle(frame, c1, c2, (128,128,128), -1, cv2.LINE_AA)
             label_draw_position = (c1[0], c1[1] - 2)
             cv2.putText(frame, label, label_draw_position, 0, lw / 3, id_color, thickness=tf, lineType=cv2.LINE_AA)
 
