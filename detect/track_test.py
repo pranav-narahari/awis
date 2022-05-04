@@ -219,8 +219,8 @@ def main():
 
                 for obj in tracked_objects:
                     # print("===================================")
-                    centroid = centroid(obj.last_detection.points)
-                    if centroid[1] >= Y_threshold and centroid[0]>=X_threshold_left and centroid[0<=X_threshold_left]:
+                    centroidXY = centroid(obj.last_detection.points)
+                    if centroidXY[1] >= Y_threshold and centroidXY[0]>=X_threshold_left and centroidXY[0<=X_threshold_left]:
                         if not obj.live_points.any():
                             if obj.hit_counter < obj.hit_inertia_min:
                                 container_count+=1
