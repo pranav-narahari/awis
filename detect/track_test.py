@@ -251,7 +251,7 @@ def main():
                 drawing.draw_tracked_objects(image, tracked_objects)
                 # for obj in tracked_objects: container_count+=1 if centroid(obj.last_detection.points)[1]>445 else 0
                 image = cv2.line(image, (0,Y_threshold), (frame_width, Y_threshold), (0,0,0), 1)
-                image = cv2.line(image, (int(frame_width-DD_width/2), frame_height-50), (int(frame_width-DD_width/2), frame_height), (0,0,0), 1)
+                image = cv2.line(image, (int((frame_width-DD_width)/2), frame_height-50), (int((frame_width-DD_width)/2), frame_height), (0,0,0), 1)
                 cv2.imshow("frame", image)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
