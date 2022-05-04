@@ -127,6 +127,7 @@ class Tracker:
 
         count = 0
         for det in unmatched_detections:
+            print(det.label)
             count+=1
         print("A: ", count)
 
