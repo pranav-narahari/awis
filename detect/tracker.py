@@ -128,7 +128,7 @@ class Tracker:
         count = 0
         for det in unmatched_detections:
             count+=1
-        print(count)
+        print("A: ", count)
 
         # Update not yet initialized tracked objects with yet unmatched detections
         unmatched_detections = self.update_objects_in_place(
@@ -137,6 +137,7 @@ class Tracker:
 
         # Create new tracked objects from remaining unmatched detections
         for detection in unmatched_detections:
+            print("Here")
             self.tracked_objects.append(
                 TrackedObject(
                     detection,
