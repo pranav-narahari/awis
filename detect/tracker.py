@@ -9,7 +9,9 @@ from filterpy.kalman import KalmanFilter
 def validate_points(points: np.array) -> np.array:
     # If the user is tracking only a single point, reformat it slightly.
     if points.shape == (2,):
+        print("Points shape before: ", points.shape)
         points = points[np.newaxis, ...]
+        print("Points shape after: ", points.shape)
     elif len(points.shape) == 1:
         print_detection_error_message_and_exit(points)
     else:
@@ -132,7 +134,6 @@ class Tracker:
 
         # Create new tracked objects from remaining unmatched detections
         for detection in unmatched_detections:
-            print("Entered")
             self.tracked_objects.append(
                 TrackedObject(
                     detection,
