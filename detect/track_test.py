@@ -224,7 +224,6 @@ def main():
                     print("Points: ", obj.last_detection.points)
                     centroidXY = centroid(obj.last_detection.points)
                     print("Centroid y: ", centroidXY[1])
-                    print("Info: ", obj.__repr__)
                     print("*********************************")
                 # drawing.draw_boxes(image, detections)
 
