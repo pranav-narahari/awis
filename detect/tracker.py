@@ -118,9 +118,13 @@ class Tracker:
 
         # Update tracker
         for obj in self.tracked_objects:            
-            print("entered")
             obj.tracker_step()
 
+        count1 = 0
+        for o in self.tracked_objects:
+            print("Initializing: ", o.is_initializing)
+            count1+=1
+        print("B: ", count1)
         # Update initialized tracked objects with detections
         unmatched_detections = self.update_objects_in_place(
             [o for o in self.tracked_objects if not o.is_initializing], detections
