@@ -154,6 +154,8 @@ def main():
     frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT ))
     print("Width", frame_width)
     print("Height", frame_height)
+    X_threshold_left = int((frame_width-DD_width)/2)
+    X_threshold_right = int((frame_width+DD_width)/2)
     if args.video == "":
         cam = cv2.VideoCapture("/media/usb-drive/videos/video1.avi")
     else:
@@ -217,8 +219,8 @@ def main():
 
                 for obj in tracked_objects:
                     # print("===================================")
-                    centroidY = centroid(obj.last_detection.points)[1]
-                    if centroidY >= Y_threshold:
+                    centroid = centroid(obj.last_detection.points)
+                    if centroid[1] >= Y_threshold and centroid[0]>=X_threshold_left and centroid[0<=X_threshold_left]:
                         if not obj.live_points.any():
                             if obj.hit_counter < obj.hit_inertia_min:
                                 container_count+=1
@@ -251,8 +253,8 @@ def main():
                 drawing.draw_tracked_objects(image, tracked_objects)
                 # for obj in tracked_objects: container_count+=1 if centroid(obj.last_detection.points)[1]>445 else 0
                 image = cv2.line(image, (0,Y_threshold), (frame_width, Y_threshold), (0,0,0), 1)
-                image = cv2.line(image, (int((frame_width-DD_width)/2), Y_threshold), (int((frame_width-DD_width)/2), frame_height), (0,0,0), 1)
-                image = cv2.line(image, (int((frame_width+DD_width)/2), Y_threshold), (int((frame_width+DD_width)/2), frame_height), (0,0,0), 1)
+                image = cv2.line(image, (X_threshold_left, Y_threshold), (X_threshold_left, frame_height), (0,0,0), 1)
+                image = cv2.line(image, (X_threshold_right, Y_threshold), (X_threshold_right, frame_height), (0,0,0), 1)
                 cv2.imshow("frame", image)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
