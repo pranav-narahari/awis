@@ -132,6 +132,7 @@ class Tracker:
 
         # Create new tracked objects from remaining unmatched detections
         for detection in unmatched_detections:
+            print("Entered")
             self.tracked_objects.append(
                 TrackedObject(
                     detection,
