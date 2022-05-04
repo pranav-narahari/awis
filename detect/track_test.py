@@ -195,6 +195,11 @@ def main():
 
                 detections = yolo_detections_to_norfair_detections(labels, nms_result, track_points="bbox")
 
+                count = 0
+                for det in detections:
+                    count+=1
+                print("Number of detections: ", count)
+
                 tracked_objects = track.update(detections=detections)
                 
                 print("===================================")
@@ -210,7 +215,7 @@ def main():
                     s = s[:-1]
                 
                 logger.info("Detected: {}".format(s))
-                print("Tracked objects count: ", tracked_objects.count)
+
 
                 # for det in detections:
                 #     print("*********************************")
