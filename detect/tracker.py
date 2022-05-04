@@ -118,6 +118,7 @@ class Tracker:
 
         # Update tracker
         for obj in self.tracked_objects:            
+            print("entered")
             obj.tracker_step()
 
         # Update initialized tracked objects with detections
