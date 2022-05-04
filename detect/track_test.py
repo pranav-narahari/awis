@@ -225,6 +225,8 @@ def main():
                     centroidXY = centroid(obj.last_detection.points)
                     print("Centroid y: ", centroidXY[1])
                     print("*********************************")
+                print("===================================")
+
                 # drawing.draw_boxes(image, detections)
 
                 # print("Count: ", container_count)
