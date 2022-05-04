@@ -15,7 +15,7 @@ import tracker
 
 max_distance_between_points: int = 30
 Y_threshold = 450
-DD_width = 210
+DD_width = 250
 
 def centroid(tracked_points: np.array) -> Tuple[int, int]:
     num_points = tracked_points.shape[0]
