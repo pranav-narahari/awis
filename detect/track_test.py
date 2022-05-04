@@ -213,23 +213,20 @@ def main():
                 logger.info("Detected: {}".format(s))
 
 
-                for i, obj in enumerate(tracked_objects):
-                    print("------------")
-                    print("i", i)
-                    print("ID", obj.id)
-                    print("------------")
-                    # if obj.id == 5:
-                    #     print("*********************************")
-                    #     print("Label: ", obj.last_detection.label)
-                    #     print("Live: ", obj.live_points)
-                    #     print("Score: ", obj.last_detection.scores)
-                    #     print("ID: ", obj.id)
-                    #     print("Hit counter: ", obj.hit_counter)
-                    #     print("Point hit counter: ", obj.point_hit_counter)
-                    #     print("Points: ", obj.last_detection.points)
-                    #     centroidXY = centroid(obj.last_detection.points)
-                    #     print("Centroid y: ", centroidXY[1])
-                    #     print("*********************************")
+                for obj in tracked_objects:
+                    print("===================================")
+                    if obj.id == 5:
+                        print("*********************************")
+                        print("Label: ", obj.last_detection.label)
+                        print("Live: ", obj.live_points)
+                        print("Score: ", obj.last_detection.scores)
+                        print("ID: ", obj.id)
+                        print("Hit counter: ", obj.hit_counter)
+                        print("Point hit counter: ", obj.point_hit_counter)
+                        print("Points: ", obj.last_detection.points)
+                        centroidY = centroid(obj.last_detection.points)[1]
+                        print("Centroid y: ", centroidY)
+                        print("*********************************")
                 print("===================================")
 
                 # drawing.draw_boxes(image, detections)
