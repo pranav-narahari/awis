@@ -143,7 +143,6 @@ class Tracker:
 
         # Create new tracked objects from remaining unmatched detections
         for detection in unmatched_detections:
-            print("Here")
             self.tracked_objects.append(
                 TrackedObject(
                     detection,
@@ -166,10 +165,12 @@ class Tracker:
         objects: Sequence["TrackedObject"],
         detections: Optional[List["Detection"]],
     ):
-        print("I'm here first")
         if detections is not None and len(detections) > 0:
+            print("entered")
             distance_matrix = np.ones((len(detections), len(objects)), dtype=np.float32)
+            print("Distance matrix: ", distance_matrix)
             distance_matrix *= self.distance_threshold + 1
+            print("Distance matrix: ", distance_matrix)
             for d, detection in enumerate(detections):
                 for o, obj in enumerate(objects):
                     if detection.label != obj.label:
@@ -296,7 +297,6 @@ class TrackedObject:
         past_detections_length: int,
         moved: bool
     ):
-        print("I'm here")
         try:
             initial_detection_points = validate_points(initial_detection.points)
         except AttributeError:
