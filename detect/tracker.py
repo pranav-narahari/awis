@@ -196,7 +196,6 @@ class Tracker:
                 exit()
 
             # Used just for debugging distance function
-            print("Distance Matrix: ", distance_matrix)
             if distance_matrix.any():
                 for i, minimum in enumerate(distance_matrix.min(axis=0)):
                     objects[i].current_min_distance = (
@@ -354,6 +353,7 @@ class TrackedObject:
     def estimate(self):
         positions = self.filter.x.T.flatten()[: self.dim_z].reshape(-1, 2)
         velocities = self.filter.x.T.flatten()[self.dim_z :].reshape(-1, 2)
+        print("Velocity", velocities)
         return positions
 
     @property
