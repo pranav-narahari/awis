@@ -297,6 +297,7 @@ class TrackedObject:
         self.point_hit_inertia_min: int = math.floor(hit_inertia_min / point_transience)
         self.point_hit_inertia_max: int = math.ceil(hit_inertia_max / point_transience)
         if (self.point_hit_inertia_max - self.point_hit_inertia_min) < period:
+            print("Entered")
             self.point_hit_inertia_max = self.point_hit_inertia_min + period
         self.detection_threshold: float = detection_threshold
         self.initial_period: int = period
