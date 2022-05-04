@@ -8,6 +8,7 @@ from filterpy.kalman import KalmanFilter
 
 def validate_points(points: np.array) -> np.array:
     # If the user is tracking only a single point, reformat it slightly.
+    print("points.shape: ", points.shape)
     if points.shape == (2,):
         print("Points shape before: ", points.shape)
         points = points[np.newaxis, ...]
