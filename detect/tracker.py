@@ -160,7 +160,6 @@ class Tracker:
             for d, detection in enumerate(detections):
                 for o, obj in enumerate(objects):
                     if detection.label != obj.label:
-                        print("Entered")
                         distance_matrix[d, o] = self.distance_threshold + 1
                         if (detection.label is None) or (obj.label is None):
                             print(
@@ -197,7 +196,7 @@ class Tracker:
                 exit()
 
             # Used just for debugging distance function
-            # print("Distance Matrix: ", distance_matrix)
+            print("Distance Matrix: ", distance_matrix)
             if distance_matrix.any():
                 for i, minimum in enumerate(distance_matrix.min(axis=0)):
                     objects[i].current_min_distance = (
@@ -338,9 +337,6 @@ class TrackedObject:
 
     @property
     def is_initializing(self):
-        print("Hit counter", self.hit_counter)
-        print("min+delay", self.hit_inertia_min + self.initialization_delay)
-        print("bool", self.is_initializing_flag and self.hit_counter > self.hit_inertia_min + self.initialization_delay)
         if (
             self.is_initializing_flag
             and self.hit_counter > self.hit_inertia_min + self.initialization_delay
