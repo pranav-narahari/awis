@@ -77,7 +77,7 @@ def draw_tracked_objects(
     if id_size is None:
         id_size = frame_scale / 10
     if id_thickness is None:
-        id_thickness = int(frame_scale / 5)
+        id_thickness = max(2, int(frame_scale / 5))
     if label_size is None:
         label_size = int(max(frame_scale / 100, 1))
 
