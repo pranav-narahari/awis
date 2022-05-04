@@ -162,6 +162,7 @@ class Tracker:
             print("Distance matrix: ", distance_matrix)
             for d, detection in enumerate(detections):
                 for o, obj in enumerate(objects):
+                    print("Entered")
                     if detection.label != obj.label:
                         distance_matrix[d, o] = self.distance_threshold + 1
                         if (detection.label is None) or (obj.label is None):
