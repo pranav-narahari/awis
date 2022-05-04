@@ -120,21 +120,10 @@ class Tracker:
         for obj in self.tracked_objects:            
             obj.tracker_step()
 
-        count1 = 0
-        for o in self.tracked_objects:
-            print("Initializing: ", o.is_initializing)
-            count1+=1
-        print("B: ", count1)
         # Update initialized tracked objects with detections
         unmatched_detections = self.update_objects_in_place(
             [o for o in self.tracked_objects if not o.is_initializing], detections
         )
-
-        count = 0
-        for det in unmatched_detections:
-            print(det.label)
-            count+=1
-        print("A: ", count)
 
         # Update not yet initialized tracked objects with yet unmatched detections
         unmatched_detections = self.update_objects_in_place(
@@ -168,7 +157,7 @@ class Tracker:
         if detections is not None and len(detections) > 0:
             print("entered")
             distance_matrix = np.ones((len(detections), len(objects)), dtype=np.float32)
-            print("Distance matrix: ", distance_matrix)
+            print("Distance matrix: ", distance_matrix.shape)
             distance_matrix *= self.distance_threshold + 1
             print("Distance matrix: ", distance_matrix)
             for d, detection in enumerate(detections):
