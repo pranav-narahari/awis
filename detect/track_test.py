@@ -211,9 +211,9 @@ def main():
                 
                 logger.info("Detected: {}".format(s))
                 print("Tracked objects count: ", tracked_objects.count)
-                exit()
-                for det in detections:
-                    print("*********************************")
+
+                # for det in detections:
+                #     print("*********************************")
 
                 # for obj in tracked_objects:
                 #     print("*********************************")

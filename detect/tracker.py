@@ -109,6 +109,9 @@ class Tracker:
         self.moved = moved
         TrackedObject.count = 0
 
+        print("Distance Threshold: ", self.distance_threshold)
+        print("Point Transcience: ", self.point_transience)
+
     def update(self, detections: Optional[List["Detection"]] = None, period: int = 1):
         self.period = period
 
