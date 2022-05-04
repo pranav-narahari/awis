@@ -338,6 +338,7 @@ class TrackedObject:
 
     @property
     def is_initializing(self):
+        print(self.hit_counter)
         if (
             self.is_initializing_flag
             and self.hit_counter > self.hit_inertia_min + self.initialization_delay
