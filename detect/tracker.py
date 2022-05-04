@@ -117,7 +117,8 @@ class Tracker:
         self.tracked_objects = [o for o in self.tracked_objects if o.has_inertia]
 
         # Update tracker
-        for obj in self.tracked_objects:            
+        for obj in self.tracked_objects:
+            print("Entered")            
             obj.tracker_step()
 
         # Update initialized tracked objects with detections
@@ -297,7 +298,6 @@ class TrackedObject:
         self.point_hit_inertia_min: int = math.floor(hit_inertia_min / point_transience)
         self.point_hit_inertia_max: int = math.ceil(hit_inertia_max / point_transience)
         if (self.point_hit_inertia_max - self.point_hit_inertia_min) < period:
-            print("Entered")
             self.point_hit_inertia_max = self.point_hit_inertia_min + period
         self.detection_threshold: float = detection_threshold
         self.initial_period: int = period
