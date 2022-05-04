@@ -220,6 +220,7 @@ def main():
                     if centroidY >= Y_threshold:
                         if not obj.live_points.any():
                             if obj.hit_counter < obj.hit_inertia_min:
+                                print("Point hit counter: ", obj.point_hit_counter)
                                 container_count+=1
                     # if obj.id == 5:
                     #     print("*********************************")
