@@ -117,15 +117,18 @@ class Tracker:
         self.tracked_objects = [o for o in self.tracked_objects if o.has_inertia]
 
         # Update tracker
-        for obj in self.tracked_objects:
-            print(self.period)
-            print("Entered")
+        for obj in self.tracked_objects:            
             obj.tracker_step()
 
         # Update initialized tracked objects with detections
         unmatched_detections = self.update_objects_in_place(
             [o for o in self.tracked_objects if not o.is_initializing], detections
         )
+
+        count = 0
+        for det in unmatched_detections:
+            count+=1
+        print(count)
 
         # Update not yet initialized tracked objects with yet unmatched detections
         unmatched_detections = self.update_objects_in_place(
