@@ -13,7 +13,8 @@ from objects import get_objects
 import drawing
 import tracker
 
-max_distance_between_points: int = 50
+max_distance_between_points: int = 30
+Y_threshold = 450
 
 def centroid(tracked_points: np.array) -> Tuple[int, int]:
     num_points = tracked_points.shape[0]
@@ -214,20 +215,25 @@ def main():
 
 
                 for obj in tracked_objects:
-                    print("===================================")
-                    if obj.id == 5:
-                        print("*********************************")
-                        print("Label: ", obj.last_detection.label)
-                        print("Live: ", obj.live_points)
-                        print("Score: ", obj.last_detection.scores)
-                        print("ID: ", obj.id)
-                        print("Hit counter: ", obj.hit_counter)
-                        print("Point hit counter: ", obj.point_hit_counter)
-                        print("Points: ", obj.last_detection.points)
-                        centroidY = centroid(obj.last_detection.points)[1]
-                        print("Centroid y: ", centroidY)
-                        print("*********************************")
-                print("===================================")
+                    # print("===================================")
+                    centroidY = centroid(obj.last_detection.points)[1]
+                    if centroidY >= Y_threshold:
+                        if not obj.live_points.any():
+                            if obj.hit_counter < obj.hit_inertia_min:
+                                container_count+=1
+                    # if obj.id == 5:
+                    #     print("*********************************")
+                    #     print("Label: ", obj.last_detection.label)
+                    #     print("Live: ", obj.live_points)
+                    #     print("Score: ", obj.last_detection.scores)
+                    #     print("ID: ", obj.id)
+                    #     print("Hit counter: ", obj.hit_counter)
+                    #     print("Point hit counter: ", obj.point_hit_counter)
+                    #     print("Points: ", obj.last_detection.points)
+                    #     centroidY = centroid(obj.last_detection.points)[1]
+                    #     print("Centroid y: ", centroidY)
+                    #     print("*********************************")
+                # print("===================================")
 
                 # drawing.draw_boxes(image, detections)
 
@@ -240,9 +246,10 @@ def main():
                 #     output_image = make_box(xyxy, image, label=label)
 
 
+                print("Container load count: ", container_count)
                 drawing.draw_tracked_objects(image, tracked_objects)
                 for obj in tracked_objects: container_count+=1 if centroid(obj.last_detection.points)[1]>445 else 0
-                image = cv2.line(image, (0,445), (frame_width, 445), (0,0,0), 1)
+                image = cv2.line(image, (0,Y_threshold), (frame_width, Y_threshold), (0,0,0), 1)
                 cv2.imshow("frame", image)
                 if cv2.waitKey(0) & 0xFF == ord('q'):
                     break
