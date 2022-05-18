@@ -5,6 +5,8 @@ import numpy as np
 import cv2
 import yaml
 from typing import Union, List, Optional, Tuple
+import time
+
 
 from pycoral.utils import edgetpu
 from pycoral.adapters import common
@@ -168,6 +170,7 @@ def main():
     paths_drawer = drawing.Paths(center, attenuation=0.01)
     container_count= 0
     
+    start_time = time.time()
     while True:
         try:
             res, image = cam.read()
@@ -257,6 +260,9 @@ def main():
 
         except KeyboardInterrupt:
             break
+    
+        print("FPS: ", (1/(time.time()-start_time)))
+        start_time = time.time()
         
     cam.release()
 
