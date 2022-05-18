@@ -15,8 +15,8 @@ def run(camera_idx=0, output="None"):
     # Create a VideoCapture object
     logger.info("Starting video stream from camera-"+str(camera_idx))
     cap = cv2.VideoCapture(camera_idx)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT,640)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH,480)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT,1280)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH,720)
 
     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH ))
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT ))
