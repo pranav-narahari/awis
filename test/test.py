@@ -1,3 +1,4 @@
+from re import T
 import cv2
 import os
 import argparse
@@ -38,6 +39,9 @@ def run(camera_idx=0, output="None", height=480, width=640):
 
         image = cv2.imread("Test.png")
         print("Image Shape: ", image.shape)
+
+        cv2.imshow("Test", image)
+        cv2.waitKey(2000)
 
 
 
