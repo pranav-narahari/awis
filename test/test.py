@@ -39,6 +39,10 @@ def run(camera_idx=0, output="None", height=480, width=640):
         image = cv2.imread("Test.png")
         print("Image Shape: ", image.shape)
 
+        if cv2.waitKey(2000):
+            cv2.imshow("Test", image)
+
+
 
     # When everything done, release the video capture
     cap.release()
