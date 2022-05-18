@@ -44,6 +44,7 @@ def run(camera_idx=0, output="None"):
 def parse_args():
     # parsing the arguments
     parser = argparse.ArgumentParser("Data Capture")
+    parser.add_argument('--camera_idx', type=int, default=0, help='Index of which video source to use')
     parser.add_argument("--output", default="None", type=str, help="USB output directory")
     args = parser.parse_args()
     logger.info(f'Arguements: ' + ', '.join(f'{k}={v}' for k, v in vars(args).items()))
