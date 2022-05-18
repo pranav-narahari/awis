@@ -30,9 +30,14 @@ def run(camera_idx=0, output="None", height=480, width=640):
     if ret == True:
         cv2.imwrite("Test.png", frame)
 
+        print("Frame Width Set: ", width)
+        print("Frame Height Set: ", height)
         print("Frame Width: ", frame_width)
         print("Frame Height: ", frame_height)
-        print("Saved image size: ", frame.shape)
+        print("Saved image Frame size: ", frame.shape)
+
+        image = cv2.imread("Test.png")
+        print("Image Shape: ", image.shape)
 
 
     # When everything done, release the video capture
