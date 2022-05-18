@@ -247,12 +247,12 @@ def main():
                 image = cv2.line(image, (X_threshold_left, Y_threshold), (X_threshold_left, frame_height), (0,0,0), 1)
                 image = cv2.line(image, (X_threshold_right, Y_threshold), (X_threshold_right, frame_height), (0,0,0), 1)
                 cv2.imshow("frame", image)
-                if cv2.waitKey(0) & 0xFF == ord('q'):
+                if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
             else:
                 cv2.imshow("frame", image)
-                if cv2.waitKey(0) & 0xFF == ord('q'):
+                if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
         except KeyboardInterrupt:
