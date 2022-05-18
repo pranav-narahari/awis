@@ -106,6 +106,7 @@ def main():
     default_model_dir = '../yolo_model'
     default_model = 'best-int8_edgetpu.tflite'
     default_labels = 'AWIS.yaml'
+    default_video = "/media/usb-drive/videos/video1.avi"
     parser = argparse.ArgumentParser("EdgeTPU test runner")
     parser.add_argument("--model", "-m", help="weights file", 
                         default=os.path.join(default_model_dir,default_model))
@@ -114,7 +115,7 @@ def main():
     parser.add_argument("--labels", type=str, help="Labels file", 
                         default=os.path.join(default_model_dir,default_labels))
     parser.add_argument("--device", type=int, default=0, help="Image capture device to run live detection")
-    parser.add_argument("--video", type=str, default="", help="Video file name")
+    parser.add_argument("--video", type=str, default=default_video, help="Video file name")
     parser.add_argument("--filter", type=str, default=None, help="Classes to show")
    
     args = parser.parse_args()
@@ -156,10 +157,10 @@ def main():
     # print("Height", frame_height)
     X_threshold_left = int((frame_width-DD_width)/2)
     X_threshold_right = int((frame_width+DD_width)/2)
-    if args.video == "":
-        cam = cv2.VideoCapture("/media/usb-drive/videos/video1.avi")
-    else:
-        cam = cv2.VideoCapture(args.video)
+    # if args.video:
+    #     cam = cv2.VideoCapture("/media/usb-drive/videos/video1.avi")
+    # else:
+    #     cam = cv2.VideoCapture(args.video)
     track = tracker.Tracker(
         distance_function=euclidean_distance,
         distance_threshold=max_distance_between_points,
