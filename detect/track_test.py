@@ -219,7 +219,13 @@ def main():
 
                 for obj in tracked_objects:
                     centroidXY = centroid(obj.last_detection.points)
+                    if obj.id == 1:
+                        print("Centroid: ", centroidXY)
+                        print("Hit counter: ", obj.hit_counter)
+                        print("Point hit counter: ", obj.point_hit_counter)
+                        print("Live point: ", obj.live_points)
                     if centroidXY[1] >= Y_threshold and centroidXY[0]>=X_threshold_left and centroidXY[0<=X_threshold_left]:
+                        # print(f{})
                         if not obj.live_points.any():
                             if obj.hit_counter < obj.hit_inertia_min:
                                 container_count+=1
@@ -240,7 +246,7 @@ def main():
                 image = cv2.line(image, (X_threshold_left, Y_threshold), (X_threshold_left, frame_height), (0,0,0), 1)
                 image = cv2.line(image, (X_threshold_right, Y_threshold), (X_threshold_right, frame_height), (0,0,0), 1)
                 cv2.imshow("frame", image)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
+                if cv2.waitKey(0) & 0xFF == ord('q'):
                     break
 
             else:
