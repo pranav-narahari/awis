@@ -1,28 +1,24 @@
 #!/bin/bash
 
-echo "creating config.json\n"
+sudo echo "creating config.json"
+
+echo "
+Sl No: $1 
+Name: $2
+Site: $3
+DD Location: $4"
+
 #need to change the directory
-cat > ~/Documents//Projects/TES\ EI\ E2E/AWIS/scripts/General/config.json<< EOF 
+cat > /etc/awis_device_config.json<< EOF 
 
 {
-  "DEFAULT_IP": "0.0.0.0",
-  "DEFAULT_PORT": 32022,
-  "DEFAULT_CAMERA": 3,
-  "DEFAULT_MODEL": "AWIS_yolov5n_edgetpu.tflite",
-  "DEFAULT_LABELS": "AWIS.yaml",
-  "DEFAULT_CONFIDENCE": "0.90",
-  "DEFAULT_INTERSECTION": "0.45",
-  "AWS_ACCESS_KEY": "",
-  "AWS_SECRET_KEY": "",
-  "IMAGE_STORAGE_PATH": "/media/flash/ImageData",
-  "VIDEO_STORAGE_PATH": "/media/flash/VideoData",
-  "VIDEO_RECORD_FRAME_RATE": "4",
-  "START_DETECTION_AT_LAUNCH": 1,
-  "START_TRACKING_AT_LAUNCH": 1,
-  "START_IMAGE_CAPTURE_AT_LAUNCH": 0,
-  "START_MOVING_CAPTURE_AT_LAUNCH": 0,
-  "MIN_MOVE_DIST_FOR_IMAGE_CAPTURE": 20,
-  "DISABLE_FLASK_SERVER": 0
+"model": "AWIS-CORAL-v1.0",
+"serial": "$1",
+"application": "Dock Door VPM Detection",
+"name": "$2",
+"site": "$3",
+"location": "$4",
+"notes": "Hardware: Coral TPU Dev Board with Coral Camera"
 }
 
 
