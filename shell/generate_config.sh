@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo echo "creating config.json"
+sudo echo "awis_device_config.json"
 
 echo "
 Sl No: $1 
